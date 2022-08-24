@@ -1,0 +1,5 @@
+﻿  Sorting.cpp
+C:\Users\20115\source\repos\Sorting\Sorting\Sorting.cpp(407,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\20115\source\repos\Sorting\Sorting\Sorting.cpp(211): warning C4715: 'partitionadelnsim': not all control paths return a value
+C:\Users\20115\source\repos\Sorting\Sorting\Sorting.cpp(258): warning C4717: 'QuickSort': recursive on all control paths, function will cause runtime stack overflow
+  Sorting.vcxproj -> C:\Users\20115\source\repos\Sorting\Debug\Sorting.exe

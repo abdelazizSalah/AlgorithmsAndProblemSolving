@@ -1,0 +1,161 @@
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+int main()
+{
+	ifstream file;
+	file.open("InputSample.txt"); // opening the file 
+
+	if (!file.is_open()) // if it can't open it
+	{
+		cout << "can't open\n";
+		return -1;
+	}
+
+	int NoOfMount; // no of mount rovers
+	file >> NoOfMount;
+	int* Mspeed = new int[NoOfMount]; // array to store the speed
+	for (int i = 0; i < NoOfMount; i++)
+	{
+		file >> Mspeed[i];
+	}
+
+	// no of emerg rovers
+	int NoOfEmerg;
+	file >> NoOfEmerg;
+	int* Espeed = new int[NoOfEmerg];
+	for (int i = 0; i < NoOfEmerg; i++)
+	{
+		file >> Espeed[i];
+	}
+
+	// no of pol rovers
+	int NoOfPol;
+	file >> NoOfPol;
+	int* Pspeed = new int[NoOfPol];
+	for (int i = 0; i < NoOfPol; i++)
+	{
+		file >> Pspeed[i];
+	}
+
+	//no of missions before checkup
+	int NOMBC;
+	file >> NOMBC;
+
+	// static member function
+	//Rover::set_N(NOMBC);
+
+	//checkup durations 
+	int CM, CP, CE;
+	file >> CM >> CP >> CE;
+
+	//Autop -> number of days after which the mountanious mission is automatically promoted 
+	int AutoP = 0;
+	file >> AutoP;
+
+	// no of events in the file 
+	int Eventsnum = 0;
+	file >> Eventsnum;
+
+	////creation of Mrovers
+	//for (size_t i = 0; i < NoOfMount; i++)
+	//{
+	//	MRover* Mptr = new MRover(Mspeed[i], CM);
+	//	AddRover(Mptr);
+	//	Mptr->set_M_checkup(CM);
+	//}
+
+	////creation of Provers
+	//for (size_t i = 0; i < NoOfPol; i++)
+	//{
+	//	PRover* Pptr = new PRover(Pspeed[i], CM);
+	//	AddRover(Pptr);
+	//	Pptr->set_P_checkup(CP);
+	//}
+
+	////creation of Erovers
+	//for (size_t i = 0; i < NoOfEmerg; i++)
+	//{
+	//	ERover* Eptr = new ERover(Espeed[i], CM);
+	//	AddRover(Eptr);
+	//	Eptr->set_E_checkup(CE);
+	//}
+
+	//iterating on all events
+	for (size_t i = 0; i < Eventsnum; i++)
+	{
+		char typeEv;   // type of the event
+		file >> typeEv;
+
+		if (typeEv == 'F' || typeEv == 'f')  // formulation event
+		{
+
+			//READING DATA
+			char typeM; // type of the missions 
+			file >> typeM;
+
+			int eventday;
+			file >> eventday;
+
+			int ID;  //no more than one mission can have the same ID
+			file >> ID;
+
+			int TLOC; //targetLoc
+			file >> TLOC;
+
+			int MDUR; // no of days needed to fulfill the missions 
+			file >> MDUR;
+
+			int SIG; // mission significance 
+			file >> SIG;
+
+			////DETERMINE WHICH TYPE SHOULD WORK ON
+			//if (typeM == 'M' || typeM == 'm') // mount
+			//{
+			//	//Formulation(TYPE rtype, int rTLOG, int rSIG, int rMDUR, int id, int ED, MarsStation * rMrsPtr);
+			//	Event* Fptr = new Formulation(MOUNTAINOUS, TLOC, SIG, MDUR, ID, eventday, this);
+			//	Events.enqueue(Fptr);
+			//}
+			//else if (typeM == 'P' || typeM == 'p') // polar
+			//{
+			//	Event* Fptr = new Formulation(POLAR, TLOC, SIG, MDUR, ID, eventday, this);
+			//	Events.enqueue(Fptr);
+			//}
+			//else if (typeM == 'E' || typeM == 'e') // emerg
+			//{
+			//	/*Event* Fptr = new Formulation(EMERGENCY, TLOC, SIG, MDUR, ID, eventday, this);
+			//	Events.enqueue(Fptr);*/
+			//}
+			continue;
+		}
+
+		else if (typeEv == 'X' || typeEv == 'x') //cancelation event
+		{
+			int eventday;
+			file >> eventday;
+			int ID;  //no more than one mission can have the same ID
+			file >> ID;
+			/*		Event* Cptr = new Cancelation(ID, eventday, this);
+					Events.enqueue(Cptr);*/
+			continue;
+		}
+
+		else if (typeEv == 'P' || typeEv == 'p') // promotion event
+		{
+			int eventday;
+			file >> eventday;
+			int ID;  //no more than one mission can have the same ID
+			file >> ID;
+			//Event* Pptr = new Promotion(ID, eventday, this); // creat event and enqueue in the lis
+			//Events.enqueue(Pptr);
+			//continue;
+		}
+
+
+		
+
+	}
+	file.close(); // closing the file 
+	return 0;
+}

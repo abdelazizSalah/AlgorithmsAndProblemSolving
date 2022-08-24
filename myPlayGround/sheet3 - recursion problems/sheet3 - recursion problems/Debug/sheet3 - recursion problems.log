@@ -1,0 +1,4 @@
+﻿  Source.cpp
+C:\Users\20115\source\repos\sheet3 - recursion problems\sheet3 - recursion problems\Source.cpp(47): warning C4715: 'frequancy': not all control paths return a value
+C:\Users\20115\source\repos\sheet3 - recursion problems\sheet3 - recursion problems\Source.cpp(128): warning C4715: 'LastOcc': not all control paths return a value
+  sheet3 - recursion problems.vcxproj -> C:\Users\20115\source\repos\sheet3 - recursion problems\Debug\sheet3 - recursion problems.exe

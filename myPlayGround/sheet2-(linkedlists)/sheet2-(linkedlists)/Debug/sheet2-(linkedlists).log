@@ -1,0 +1,6 @@
+﻿  Source.cpp
+C:\Users\20115\source\repos\sheet2-(linkedlists)\sheet2-(linkedlists)\Source.cpp(31,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\20115\source\repos\sheet2-(linkedlists)\sheet2-(linkedlists)\Source.cpp(61,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\20115\source\repos\sheet2-(linkedlists)\sheet2-(linkedlists)\Source.cpp(101,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\20115\source\repos\sheet2-(linkedlists)\sheet2-(linkedlists)\Source.cpp(110,23): warning C4018: '<': signed/unsigned mismatch
+  sheet2-(linkedlists).vcxproj -> C:\Users\20115\source\repos\sheet2-(linkedlists)\Debug\sheet2-(linkedlists).exe
