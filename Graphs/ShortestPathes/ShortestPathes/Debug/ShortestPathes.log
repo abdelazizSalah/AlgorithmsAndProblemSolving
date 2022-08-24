@@ -1,7 +1,0 @@
-﻿  SingleSourceAlgorithms.cpp
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\bits\stdc++.h(197,10): warning C4018: '<': signed/unsigned mismatch
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\bits\stdc++.h(198,10): warning C4018: '<': signed/unsigned mismatch
-C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\lectures\shortest paths\ShortestPathes\ShortestPathes\SingleSourceAlgorithms.cpp(151,14): warning C4018: '<=': signed/unsigned mismatch
-C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\lectures\shortest paths\ShortestPathes\ShortestPathes\SingleSourceAlgorithms.cpp(201,33): warning C4018: '<': signed/unsigned mismatch
-C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\lectures\shortest paths\ShortestPathes\ShortestPathes\SingleSourceAlgorithms.cpp(218,32): warning C4018: '<': signed/unsigned mismatch
-  ShortestPathes.vcxproj -> C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\lectures\shortest paths\ShortestPathes\Debug\ShortestPathes.exe

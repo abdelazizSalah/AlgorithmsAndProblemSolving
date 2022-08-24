@@ -1,9 +1,0 @@
-﻿  AlgoRev.cpp
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\bits\stdc++.h(197,10): warning C4018: '<': signed/unsigned mismatch
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\bits\stdc++.h(198,10): warning C4018: '<': signed/unsigned mismatch
-C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\ProblemSolving\week8\GraphTraversal\GraphTraversal\AlgoRev.cpp(358,11): warning C4834: discarding return value of function with 'nodiscard' attribute
-C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\ProblemSolving\week8\GraphTraversal\GraphTraversal\AlgoRev.cpp(474,20): warning C4018: '<': signed/unsigned mismatch
-LongestPathInTree.obj : warning LNK4099: PDB 'vc142.pdb' was not found with 'LongestPathInTree.obj' or at 'C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\ProblemSolving\week8\GraphTraversal\Debug\vc142.pdb'; linking object as if no debug info
-IsItATree.obj : warning LNK4099: PDB 'vc142.pdb' was not found with 'IsItATree.obj' or at 'C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\ProblemSolving\week8\GraphTraversal\Debug\vc142.pdb'; linking object as if no debug info
-GraphTraversal.obj : warning LNK4099: PDB 'vc142.pdb' was not found with 'GraphTraversal.obj' or at 'C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\ProblemSolving\week8\GraphTraversal\Debug\vc142.pdb'; linking object as if no debug info
-  GraphTraversal.vcxproj -> C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\ProblemSolving\week8\GraphTraversal\Debug\GraphTraversal.exe

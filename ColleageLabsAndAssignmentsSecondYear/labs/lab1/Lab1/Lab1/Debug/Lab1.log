@@ -1,0 +1,7 @@
+﻿  Discrete.cpp
+  p1.cpp
+C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\labs\lab1\Lab1\Lab1\p1.cpp(10,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\labs\lab1\Lab1\Lab1\p1.cpp(47,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\labs\lab1\Lab1\Lab1\p1.cpp(65,21): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Lab1.vcxproj -> C:\Users\20115\Dropbox\My PC (LAPTOP-ILAL93NC)\Desktop\SecondYear\FirstTerm\Algorithms\labs\lab1\Lab1\Debug\Lab1.exe
