@@ -20,7 +20,9 @@
   "C_Cpp_Runner.warningsAsError": false,
   "C_Cpp_Runner.compilerArgs": [],
   "C_Cpp_Runner.linkerArgs": [],
-  "C_Cpp_Runner.includePaths": [],
+  "C_Cpp_Runner.includePaths": [
+    "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32"
+  ],
   "C_Cpp_Runner.includeSearch": [
     "*",
     "**/*"
