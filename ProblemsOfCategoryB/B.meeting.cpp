@@ -26,6 +26,7 @@ int findingNoOfBlankts(vector<pair<pair<int, int>, bool>> &generals, const vecto
 
 void fillingGenerals(vector<pair<pair<int, int>, bool>> &generals, pair<int, int> topLeft, pair<int, int> bottomRight)
 {
+    // this part because we can have negative numbers.
     int beginningX = min(topLeft.first, bottomRight.first);
     int endingX = max(topLeft.first, bottomRight.first);
 
@@ -36,6 +37,7 @@ void fillingGenerals(vector<pair<pair<int, int>, bool>> &generals, pair<int, int
         generals.push_back({{i, bottomRight.second}, false});
     }
 
+    // this part because we can have negative numbers.
     int beginningY = min(bottomRight.second, topLeft.second);
     int endingY = max(bottomRight.second, topLeft.second);
     // getting the side generals positions
