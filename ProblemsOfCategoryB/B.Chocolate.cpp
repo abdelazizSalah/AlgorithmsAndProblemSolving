@@ -12,7 +12,7 @@ int main()
     for (int i = 0; i < n; i++)
     {
         cin >> arr[i];
-        if (arr[i] == 1)
+        if (arr[i] == 1) // if flag is not toggeled this means that there is no nuts
             flag = true;
     }
 
@@ -24,7 +24,7 @@ int main()
             for (int j = i + 1; j < n; j++)
                 if (arr[j] == 1)
                 {
-                    res = res * (j - i);
+                    res *= (j - i);
                     break;
                 }
 
