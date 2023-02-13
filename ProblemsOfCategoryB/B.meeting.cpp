@@ -51,14 +51,9 @@ void fillingGenerals(vector<pair<pair<int, int>, bool>> &generals, pair<int, int
 void solve()
 {
     // reading the positions
-    pair<int, int> topLeft, topRight, bottomLeft, bottomRight;
+    pair<int, int> topLeft, bottomRight;
     cin >> topLeft.first >> topLeft.second;         // defining the topLeft point
     cin >> bottomRight.first >> bottomRight.second; // defining the bottomRight point
-
-    // defining the topRight point
-    topRight = {bottomRight.first, topLeft.second};
-    // defining the bottomLeft point
-    bottomLeft = {topLeft.first, bottomRight.second};
 
     // defining a vector of points
     vector<pair<pair<int, int>, bool>> generals; // (position, isCovered)
