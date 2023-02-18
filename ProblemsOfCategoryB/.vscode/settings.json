@@ -34,5 +34,8 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ]
+  ],
+  "files.associations": {
+    "regex": "cpp"
+  }
 }
