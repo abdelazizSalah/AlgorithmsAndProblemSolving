@@ -15,6 +15,17 @@ int missingNumber(vector<int> &nums)
     return sz;
 }
 
+// another solution.
+int missingNumber2(vector<int> &nums)
+{
+    int sz = nums.size();
+    int res = (sz * (sz + 1)) / 2;
+    int sum = 0;
+    for (int num : nums)
+        sum += num;
+    return res - sum;
+}
+
 int main()
 {
     int n;
