@@ -9,9 +9,8 @@ int maxSubArray(vector<int> &nums)
     vector<int> res(sz);
     res[sz - 1] = nums[sz - 1];
     for (int i = sz - 2; i > -1; i--)
-    {
         res[i] = max(res[i + 1] + nums[i], nums[i]);
-    }
+
     return *max_element(res.begin(), res.end());
 }
 
