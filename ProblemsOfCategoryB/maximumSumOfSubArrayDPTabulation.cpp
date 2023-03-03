@@ -3,6 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// O(3 * n) = O(n) time | O(n) space
 int maxSubArray(vector<int> &nums)
 {
     int sz = nums.size();
