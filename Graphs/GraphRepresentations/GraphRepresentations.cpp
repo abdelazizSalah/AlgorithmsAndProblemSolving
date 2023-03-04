@@ -2,7 +2,7 @@
 using namespace std;
 #define endl '\n'
 // for the undirected graphs
-void MatrixRepDirected(vector<vector<int>> &graph, int src, int dest, int weight)
+void MatrixRepUndirected(vector<vector<int>> &graph, int src, int dest, int weight)
 {
 	// if working 0 based and the src and dest are sent 1 based
 	// comment them if we are working both 0 based
@@ -12,7 +12,7 @@ void MatrixRepDirected(vector<vector<int>> &graph, int src, int dest, int weight
 }
 
 // for directed graphs
-void MatrixRepUndirected(vector<vector<int>> &graph, int src, int dest, int weight)
+void MatrixRepdirected(vector<vector<int>> &graph, int src, int dest, int weight)
 {
 	// if working 0 based and the src and dest are sent 1 based
 	// comment them if we are working both 0 based
