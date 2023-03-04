@@ -5,9 +5,7 @@ int rob(vector<int> &nums)
 {
     int sz = nums.size();
     if (sz < 3)
-    {
         return *max_element(nums.begin(), nums.end());
-    }
     else
     {
         vector<int> money(sz, 0);
