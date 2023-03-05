@@ -9,12 +9,12 @@ bool isPalindrome(string s)
     while (i < j)
     {
         if (!isalnum(s[i]))
-        {
+        { // to neglect spaces
             i++;
             continue;
         }
         if (!isalnum(s[j]))
-        {
+        { // to neglect spaces
             j--;
             continue;
         }
