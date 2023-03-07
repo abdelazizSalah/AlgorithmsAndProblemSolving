@@ -154,6 +154,6 @@ int main()
 {
     fast;
     map<pair<pair<int, int>, pair<int, int>>, int> memo;
-    cout << dp(memo, {{18, {3, 'L'}}, {10, {2, 'm'}}, {4, {1, 's'}}}, 3, 1, 2, 3, 0);
+    cout << dp(memo, {{10, {2, 'm'}}, {9, {2, 'm'}}, {8, {2, 'm'}}}, 3, 5, 1, 2, 0);
     return 0;
 }
