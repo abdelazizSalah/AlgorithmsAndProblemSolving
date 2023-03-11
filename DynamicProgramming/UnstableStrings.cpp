@@ -87,21 +87,24 @@ ll dpTab(string s)
 {
     int sz = s.size();
     vector<vector<ll>> dp(sz, vector<ll>(2, 0));
-    dp[0][0] = s[0] != '1';
-    dp[0][1] = s[1] != '0';
+    dp[0][0] = (s[0] != '1');
+    dp[0][1] = (s[0] != '0');
     for (int i = 1; i < sz; i++)
     {
         if (s[i] == '?')
         {
-            dp[i][0] = 1 + dp[i - 1][1];
             dp[i][1] = 1 + dp[i - 1][0];
+            dp[i][0] = 1 + dp[i - 1][1];
         }
         else if (s[i] == '1')
-            dp[i][0] = 1 + dp[i - 1][1];
-        else
+        {
             dp[i][1] = 1 + dp[i - 1][0];
+        }
+        else
+        {
+            dp[i][0] = 1 + dp[i - 1][1];
+        }
     }
-
     ll ans = 0;
     for (int i = 0; i < sz; i++)
         ans += max(dp[i][0], dp[i][1]);
@@ -110,7 +113,6 @@ ll dpTab(string s)
 
 void solve()
 {
-    memo.clear();
     string s;
     cin >> s;
     cout << dpTab(s) << endl;
