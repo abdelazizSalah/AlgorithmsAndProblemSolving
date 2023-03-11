@@ -32,7 +32,10 @@ vector<int> solve()
     cin >> k >> n;
     vector<int> v(1, 1);
     for (int i = 1; i <= n && ((n - (v.back() + i)) >= (k - (v.size() + 1))) && (v.back() + i <= n); i++)
+        // toul ma el rkm el ha7oto ha2dr a3ml plus 1 mn b3do l7d ma awsl ll n 34an akfy 3dd el k size hafdl a3ml increment by i -> 1 2 4 7 11 17 ....
         v.push_back(v.back() + i);
+
+    // hafdl azwd 1 bs l7d ma awsl l akher rkm
     while (v.size() < k)
         v.push_back(v.back() + 1);
     return v;
