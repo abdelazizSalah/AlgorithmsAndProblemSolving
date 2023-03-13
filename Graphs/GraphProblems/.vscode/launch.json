@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/GitHub/AlgorithmsAndProblemSolving/DynamicProgramming",
-      "program": "c:/GitHub/AlgorithmsAndProblemSolving/DynamicProgramming/build/Debug/outDebug",
+      "cwd": "c:/GitHub/AlgorithmsAndProblemSolving/Graphs/GraphProblems",
+      "program": "c:/GitHub/AlgorithmsAndProblemSolving/Graphs/GraphProblems/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
