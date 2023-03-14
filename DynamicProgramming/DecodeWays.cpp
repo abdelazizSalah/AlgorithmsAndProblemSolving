@@ -51,5 +51,5 @@ int numDecodings(string s)
 int main()
 {
     DPSOLVER;
-    cout << numDecodings("2264");
+    cout << log;
 }
