@@ -325,12 +325,31 @@ void topologicalSort(const vector<vector<int>> &graph, int startingNode)
     printingStack(ourStack);
 }
 
+/// NumberOfConnectedComponents
+int numberOfConnectedComponents(const vector<vector<int>> &graph)
+{
+    int sz = graph.size();
+    if (sz > 0)
+    {
+        int numberOfComponents = 0;
+        vector<bool> visited(sz);
+        for (int i = 0; i < sz; i++)
+            if (!visited[i])
+            {
+                dfsMatrix(graph, visited, i);
+                numberOfComponents++;
+            }
+        cout << endl;
+        return numberOfComponents;
+    }
+    else
+        return 0;
+}
 int main()
 {
     int numberOfNodes, numberOfEdges;
     cin >> numberOfNodes >> numberOfEdges;
     auto mat = matrixRepresentation(numberOfNodes, numberOfEdges, false, false, true);
-    vector<bool> visited(numberOfNodes);
-    topologicalSort(mat, 0);
+    cout << numberOfConnectedComponents(mat);
     return 0;
 }
