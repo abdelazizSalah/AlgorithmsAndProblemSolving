@@ -77,6 +77,8 @@ int boruvka()
 int main()
 {
     cin >> n >> m;
+    for (int i = 0; i < n; i++)
+        parent[i] = i;
     for (int i = 0; i < m; i++)
     {
         int u, v, w;
