@@ -129,12 +129,62 @@ void dfsList(const vector<vector<pair<int, int>>> &graph, vector<bool> &visited,
     }
 }
 
+void bfsIterativeMatrix(const vector<vector<int>> &graph, vector<bool> &visited, int startingNode)
+{
+    // storing the size of the graph for later use
+    int sz = graph.size();
+
+    // creating a queue to help us in organizing the opeartion of visiting :D
+    queue<int> whosTurn;
+
+    // creating a vector to tell wethere the node in the queue or not.
+    vector<bool> inQueue(sz);
+
+    // inserting the first node in the queue
+    whosTurn.push(startingNode);
+
+    // starting the operation of looping till visiting all nodes :D
+    while (whosTurn.size())
+    {
+        // marking the node in the front as visited and getting it out of the queue
+        int node = whosTurn.front();
+        visited[node] = true;
+        whosTurn.pop();
+        inQueue[node] = false;
+
+        // iterating over all its neighbour to give them the chance of visiting :)
+        for (int i = 0; i < sz; i++)
+        {
+            /* there are three conditions to visit this node
+             1. it should be neigbour.
+             2. it should not be visited before.
+             3. it should not be in the queue
+             */
+            if (graph[node][i] && !visited[i] && !inQueue[i])
+            {
+                // inserting the neighbour in the queue
+                whosTurn.push(i);
+
+                // marking it as in the queue;
+                inQueue[i] = true;
+            }
+        }
+
+        // printing the visited node
+        cout << node + 1 << ' ';
+    }
+}
+
+void bfsRecursive()
+{
+}
+
 int main()
 {
     int numberOfNodes, numberOfEdges;
     cin >> numberOfNodes >> numberOfEdges;
-    auto mat = listRepresentation(numberOfNodes, numberOfEdges, false, false, true);
+    auto mat = matrixRepresentation(numberOfNodes, numberOfEdges, false, false, true);
     vector<bool> visited(numberOfNodes);
-    dfsList(mat, visited, 0);
+    bfsIterativeMatrix(mat, visited, 0);
     return 0;
 }
