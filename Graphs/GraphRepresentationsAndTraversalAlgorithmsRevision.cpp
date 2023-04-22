@@ -293,16 +293,44 @@ void bfsRecursiveList(const vector<vector<pair<int, int>>> &graph, vector<bool> 
         bfsRecursiveList(graph, black, grey, Q);
 }
 
+void dfsForTopologicalSort(const vector<vector<int>> &graph, stack<int> &myStack, vector<bool> &visited, int nodeToVisit)
+{
+    visited[nodeToVisit] = true;
+    int sz = graph.size();
+    myStack.push(nodeToVisit);
+    for (int i = 0; i < sz; i++)
+    {
+        if (!visited[i] && graph[nodeToVisit][i] > 0)
+        {
+            // this is a valid neighbour.
+            // lets visit him :)
+            dfsForTopologicalSort(graph, myStack, visited, i);
+        }
+    }
+}
+// TOPOLOGICAL SORT :D
+void printingStack(stack<int> &Stack)
+{
+    while (Stack.size())
+    {
+        cout << Stack.top() + 1 << ' ';
+        Stack.pop();
+    }
+}
+void topologicalSort(const vector<vector<int>> &graph, int startingNode)
+{
+    stack<int> ourStack;
+    vector<bool> visited(graph.size());
+    dfsForTopologicalSort(graph, ourStack, visited, startingNode);
+    printingStack(ourStack);
+}
+
 int main()
 {
     int numberOfNodes, numberOfEdges;
     cin >> numberOfNodes >> numberOfEdges;
-    auto mat = listRepresentation(numberOfNodes, numberOfEdges, false, false, true);
+    auto mat = matrixRepresentation(numberOfNodes, numberOfEdges, false, false, true);
     vector<bool> visited(numberOfNodes);
-    vector<bool> grey(numberOfNodes);
-    queue<int> Q;
-    Q.push(0);
-    bfsRecursiveList(mat, visited, grey, Q);
-
+    topologicalSort(mat, 0);
     return 0;
 }
