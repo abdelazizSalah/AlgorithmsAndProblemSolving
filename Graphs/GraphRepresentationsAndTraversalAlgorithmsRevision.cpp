@@ -236,7 +236,7 @@ void bfsRecursiveMatrix(const vector<vector<int>> &graph, vector<bool> &black, v
     for (int i = 0; i < sz; i++)
     {
         /* there are three conditions to visit this node
-             1. it should be neigbour. => always satisfied using this for each loop :)
+             1. it should be neigbour.
              2. it should not be visited before.
              3. it should not be in the queue
              */
@@ -256,16 +256,53 @@ void bfsRecursiveMatrix(const vector<vector<int>> &graph, vector<bool> &black, v
     while (Q.size())
         bfsRecursiveMatrix(graph, black, grey, Q);
 }
+void bfsRecursiveList(const vector<vector<pair<int, int>>> &graph, vector<bool> &black, vector<bool> &grey, queue<int> &Q)
+{
+    // get the node out from the queue
+    int node = Q.front();
+    Q.pop();
+    // mark it as visited
+    black[node] = true;
+
+    // mark it out of the queue
+    grey[node] = false;
+
+    int sz = black.size();
+    // iterating over all its neighbours and inserting them in the queue
+    for (auto neighbour : graph[node])
+    {
+        /* there are three conditions to visit this node
+             1. it should be neigbour. => always satisfied using this for each loop :)
+             2. it should not be visited before.
+             3. it should not be in the queue
+             */
+        if (!black[neighbour.first] && !grey[neighbour.first])
+        {
+            // then this is a neigbour
+
+            // insert it in the queue
+            Q.push(neighbour.first);
+
+            // mark it as in the queue
+            grey[neighbour.first] = true;
+        }
+    }
+
+    cout << node + 1 << ' ';
+    while (Q.size())
+        bfsRecursiveList(graph, black, grey, Q);
+}
 
 int main()
 {
     int numberOfNodes, numberOfEdges;
     cin >> numberOfNodes >> numberOfEdges;
-    auto mat = matrixRepresentation(numberOfNodes, numberOfEdges, false, false, true);
+    auto mat = listRepresentation(numberOfNodes, numberOfEdges, false, false, true);
     vector<bool> visited(numberOfNodes);
     vector<bool> grey(numberOfNodes);
     queue<int> Q;
     Q.push(0);
-    bfsRecursiveMatrix(mat, visited, grey, Q);
+    bfsRecursiveList(mat, visited, grey, Q);
+
     return 0;
 }
