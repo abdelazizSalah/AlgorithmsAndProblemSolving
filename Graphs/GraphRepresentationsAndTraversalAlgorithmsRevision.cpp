@@ -114,13 +114,27 @@ void dfsMatrix(const vector<vector<int>> &graph, vector<bool> &visited, int node
         }
     }
 }
+void dfsList(const vector<vector<pair<int, int>>> &graph, vector<bool> &visited, int nodeToVisit)
+{
+    visited[nodeToVisit] = true;
+    int sz = graph.size();
+    cout << nodeToVisit + 1 << ' ';
+    for (pair<int, int> pair : graph[nodeToVisit])
+    {
+        if (!visited[pair.first])
+        {
+            // lets visit our neighbours :)
+            dfsList(graph, visited, pair.first);
+        }
+    }
+}
 
 int main()
 {
     int numberOfNodes, numberOfEdges;
     cin >> numberOfNodes >> numberOfEdges;
-    auto mat = matrixRepresentation(numberOfNodes, numberOfEdges, false, false, true);
+    auto mat = listRepresentation(numberOfNodes, numberOfEdges, false, false, true);
     vector<bool> visited(numberOfNodes);
-    dfsMatrix(mat, visited, 2);
+    dfsList(mat, visited, 0);
     return 0;
 }
