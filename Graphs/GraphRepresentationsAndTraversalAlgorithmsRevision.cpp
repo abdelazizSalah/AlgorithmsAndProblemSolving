@@ -99,11 +99,28 @@ void printListRep(const vector<vector<pair<int, int>>> &graph)
     }
 }
 
+void dfsMatrix(const vector<vector<int>> &graph, vector<bool> &visited, int nodeToVisit)
+{
+    visited[nodeToVisit] = true;
+    int sz = graph.size();
+    cout << nodeToVisit + 1 << ' ';
+    for (int i = 0; i < sz; i++)
+    {
+        if (!visited[i] && graph[nodeToVisit][i] > 0)
+        {
+            // this is a valid neighbour.
+            // lets visit him :)
+            dfsMatrix(graph, visited, i);
+        }
+    }
+}
+
 int main()
 {
     int numberOfNodes, numberOfEdges;
     cin >> numberOfNodes >> numberOfEdges;
-    vector<vector<pair<int, int>>> graph = listRepresentation(numberOfNodes, numberOfEdges, false, false, true);
-    printListRep(graph);
+    auto mat = matrixRepresentation(numberOfNodes, numberOfEdges, false, false, true);
+    vector<bool> visited(numberOfNodes);
+    dfsMatrix(mat, visited, 2);
     return 0;
 }
