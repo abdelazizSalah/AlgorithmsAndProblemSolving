@@ -6,6 +6,7 @@ using namespace std;
     cin.tie(NULL);                    \
     cout.tie(NULL);
 
+// Accepted Solution ;D
 pair<vector<pair<int, int>>, pair<int, bool>> dfs(const vector<vector<int>> &G, vector<bool> &vis, int src, int parent)
 {
     if (vis[src])
@@ -117,4 +118,33 @@ int main()
     auto res = findRedundantConnection(edges);
     cout << res[0] << ' ' << res[1] << endl;
     return 0;
+}
+
+// Faster Solution ;)
+vector<int> parent;
+
+int find(int x)
+{
+    if (parent[x] != x)
+        parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+vector<int> findRedundantConnection(vector<vector<int>> &edges)
+{
+    int n = edges.size();
+    parent.resize(n + 1);
+    for (int i = 1; i <= n; i++)
+        parent[i] = i;
+
+    for (auto &edge : edges)
+    {
+        int u = edge[0], v = edge[1];
+        int parent_u = find(u), parent_v = find(v);
+        if (parent_u == parent_v)
+            return edge;
+        parent[parent_u] = parent_v;
+    }
+
+    return {};
 }
