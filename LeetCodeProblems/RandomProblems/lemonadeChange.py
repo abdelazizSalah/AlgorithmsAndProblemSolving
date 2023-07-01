@@ -32,3 +32,4 @@ for coin in money2:
         else:
             exit(-1)
 print(True)
+print(False)
