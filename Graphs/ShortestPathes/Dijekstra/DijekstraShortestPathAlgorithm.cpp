@@ -30,7 +30,7 @@ void Initialize_single_source(vector<Node> &G, int source)
 {
     /*
         @describtion: this is a common subroutine used to initialize all the nodes
-                        distance to inf, and the parent to null
+                        distance to inf, and the parent to -1
                         and the distance of the source should be = 0
     */
 
@@ -46,11 +46,6 @@ void Initialize_single_source(vector<Node> &G, int source)
     // mark the distance of the source to zero
     G[source].distance = 0;
 }
-
-// bool compareNode(Node a, Node b)
-// {
-//     return a.distance > b.distance;
-// }
 
 int Relax(vector<Node> &G, int source, int destnation, int weight)
 {
@@ -104,21 +99,13 @@ vector<Node> Dijekstra(vector<vector<int>> &G, int source)
 
         // iterate over all its neighbours and mark them as finshed
         for (int j = 0; j < size; j++)
-        {
             if (G[node.ID][j] != 0)
             { // this means it is a neighbour
                 int res = Relax(Graph, node.ID, j, G[node.ID][j]);
                 if (res != 0)
-                {
-                    // Node newNei;
-                    // newNei.ID = j;
-                    // newNei.distance = res;
-                    // newNei.parent = node.ID;
-                    // pq.push(newNei);
+                    // this mean that we have applied the relaxation operation
                     pq.push(Graph[j]);
-                }
             }
-        }
 
         // mark this node as finshed
         finshedNodes[node.ID] = true;
@@ -153,9 +140,43 @@ vector<vector<int>> buildTheGraph()
         G[--src][--dest] = w;
         G[dest][src] = w;
     }
-
-    printGraph(G);
+    // printGraph(G);
     return G;
+}
+
+void pathToNodeN(const vector<Node> &G, Node n)
+{
+    // base case
+    if (n.parent == -1)
+    {
+        cout << n.ID + 1 << ' ';
+        return;
+    }
+
+    // recursive condition
+    pathToNodeN(G, G[n.parent]);
+    cout << n.ID + 1 << ' ';
+}
+
+void CDijekstraProblemCodeForces(const vector<Node> &resGraph)
+{
+    /*
+        @problemDescribtion:
+        You are given a weighted undirected graph. The vertices are enumerated from 1 to n. Your task is to find the shortest path between the vertex 1 and the vertex n.
+        Input
+
+        The first line contains two integers n and m (2 ≤ n ≤ 105, 0 ≤ m ≤ 105), where n is the number of vertices and m is the number of edges. Following m lines contain one edge each in form ai, bi and wi (1 ≤ ai, bi ≤ n, 1 ≤ wi ≤ 106), where ai, bi are edge endpoints and wi is the length of the edge.
+
+        It is possible that the graph has loops and multiple edges between pair of vertices.
+        Output
+
+        Write the only integer -1 in case of no path. Write the shortest path in opposite case. If there are many solutions, print any of them.
+
+    */
+    if (resGraph[resGraph.size() - 1].distance != INT_MAX)
+        pathToNodeN(resGraph, resGraph[resGraph.size() - 1]);
+    else
+        cout << -1;
 }
 
 int main()
@@ -165,7 +186,6 @@ int main()
     vector<vector<int>> graph = buildTheGraph();
     // call dijekstra
     auto resGraph = Dijekstra(graph, 0);
-    for (auto node : resGraph)
-        cout << "Node#: " << node.ID + 1 << " -- Distance from source: " << node.distance << "\n";
+    CDijekstraProblemCodeForces(resGraph);
     return 0;
 }
