@@ -14,7 +14,6 @@
         3. for each neighbour (nei) to that u vertex
             1. relax (u, nei, w)
 */
-
 #include <bits/stdc++.h>
 #define DPsolver ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 using namespace std;
@@ -70,7 +69,7 @@ int Relax(vector<Node> &G, int source, int destnation, int weight)
     return 0;
 }
 
-vector<Node> Dijekstra(vector<vector<int>> &G, int source)
+vector<Node> Dijekstra(vector<vector<pair<int, int>>> &G, int source)
 {
     // define a vector of nodes, depending on no of verticies in the graph.
     int size = G.size();
@@ -100,13 +99,13 @@ vector<Node> Dijekstra(vector<vector<int>> &G, int source)
         pq.pop();
 
         // iterate over all its neighbours and mark them as finshed
-        for (int j = 0; j < size; j++)
-            if (G[node.ID][j] != 0)
+        for (auto &nei : G[node.ID])
+            if (nei.second != 0)
             { // this means it is a neighbour
-                int res = Relax(Graph, node.ID, j, G[node.ID][j]);
+                int res = Relax(Graph, node.ID, nei.first, nei.second);
                 if (res != 0)
                     // this mean that we have applied the relaxation operation
-                    pq.push(Graph[j]);
+                    pq.push(Graph[nei.first]);
             }
 
         // mark this node as finshed
@@ -117,32 +116,32 @@ vector<Node> Dijekstra(vector<vector<int>> &G, int source)
 }
 
 // O(V^2)
-void printGraph(const vector<vector<int>> &G)
+void printGraph(const vector<vector<pair<int, int>>> &G)
 {
     int sz = G.size();
     for (int i = 0; i < sz; i++)
     {
-        for (int j = 0; j < sz; j++)
-            cout << G[i][j] << ' ';
-        cout << endl;
+        cout << "node# " << i + 1 << " neighbours: \n";
+        for (auto &nei : G[i])
+            cout << "neighbour ID: " << nei.first + 1 << " --- distance: " << nei.second << endl;
     }
 }
 
 // O(E + V)
-vector<vector<int>> buildTheGraph()
+vector<vector<pair<int, int>>> buildTheGraph()
 {
     int noOfNodes, noOfEdges;
     cin >> noOfNodes >> noOfEdges;
     // matrix representation -> undirected
-    vector<vector<int>> G(noOfNodes, vector<int>(noOfNodes));
+    vector<vector<pair<int, int>>> G(noOfNodes);
 
     // reading the weights
     for (int i = 0; i < noOfEdges; i++)
     {
         int src, dest, w;
         cin >> src >> dest >> w;
-        G[--src][--dest] = w;
-        G[dest][src] = w;
+        G[--src].push_back({--dest, w});
+        G[dest].push_back({src, w});
     }
     // printGraph(G);
     return G;
@@ -190,7 +189,7 @@ int main()
 {
     DPsolver;
     // build the graph
-    vector<vector<int>> graph = buildTheGraph();
+    vector<vector<pair<int, int>>> graph = buildTheGraph();
     // call dijekstra
     auto resGraph = Dijekstra(graph, 0);
     // solve the problem
