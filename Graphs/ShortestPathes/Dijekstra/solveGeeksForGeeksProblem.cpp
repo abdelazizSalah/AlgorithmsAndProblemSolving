@@ -4,7 +4,7 @@
     @describtion: this file contains the algorithms of dijekstra for finding
                         the shortest pathes from certain single source
     @algorithm:
-    Dijekstra(G, W, s)
+    Dijekstra(G, s)
     1. Initialize_single_source(g, s)
     2. s= phi -> empty set contains the finshed nodes.
     3. Q = S.v -> heap which contains the verticies of the graph, but with sorting them ascendingly
