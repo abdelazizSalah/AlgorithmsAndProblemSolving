@@ -26,6 +26,7 @@ struct Node
     int ID;
 };
 
+// O(V) -> V is # of Nodes
 void Initialize_single_source(vector<Node> &G, int source)
 {
     /*
@@ -47,6 +48,7 @@ void Initialize_single_source(vector<Node> &G, int source)
     G[source].distance = 0;
 }
 
+// O(1)
 int Relax(vector<Node> &G, int source, int destnation, int weight)
 {
     /*
@@ -75,7 +77,7 @@ vector<Node> Dijekstra(vector<vector<int>> &G, int source)
     vector<Node> Graph(size);
 
     // initialize the graph
-    Initialize_single_source(Graph, source);
+    Initialize_single_source(Graph, source); // O(V)
 
     // create an empty set to mark the finshed nodes
     vector<bool> finshedNodes(size);
@@ -91,7 +93,7 @@ vector<Node> Dijekstra(vector<vector<int>> &G, int source)
     pq.push(Graph[source]);
 
     // iterate over all the verticies
-    while (pq.size())
+    while (pq.size()) // O(V + E) -> bfs
     {
         // extract the node with the minimum distance from the source
         Node node = pq.top();
@@ -125,6 +127,7 @@ void printGraph(const vector<vector<int>> &G)
     }
 }
 
+// O(E + V)
 vector<vector<int>> buildTheGraph()
 {
     int noOfNodes, noOfEdges;
@@ -144,6 +147,7 @@ vector<vector<int>> buildTheGraph()
     return G;
 }
 
+// O(V)
 void pathToNodeN(const vector<Node> &G, Node n)
 {
     // base case
@@ -158,6 +162,7 @@ void pathToNodeN(const vector<Node> &G, Node n)
     cout << n.ID + 1 << ' ';
 }
 
+// O(V)
 void CDijekstraProblemCodeForces(const vector<Node> &resGraph)
 {
     /*
@@ -179,6 +184,7 @@ void CDijekstraProblemCodeForces(const vector<Node> &resGraph)
         cout << -1;
 }
 
+// Time Complexity = O(V + E)
 int main()
 {
     DPsolver;
@@ -186,6 +192,7 @@ int main()
     vector<vector<int>> graph = buildTheGraph();
     // call dijekstra
     auto resGraph = Dijekstra(graph, 0);
+    // solve the problem
     CDijekstraProblemCodeForces(resGraph);
     return 0;
 }
