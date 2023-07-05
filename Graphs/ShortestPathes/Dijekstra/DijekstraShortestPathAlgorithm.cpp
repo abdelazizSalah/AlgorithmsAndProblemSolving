@@ -39,7 +39,7 @@ void Initialize_single_source(vector<Node> &G, int source)
     for (auto &node : G)
     {
         node.distance = INT_MAX;
-        node.parent = NULL;
+        node.parent = -1;
         node.ID = id++;
     }
 
@@ -47,7 +47,12 @@ void Initialize_single_source(vector<Node> &G, int source)
     G[source].distance = 0;
 }
 
-void Relax(vector<Node> &G, int source, int destnation, int weight)
+// bool compareNode(Node a, Node b)
+// {
+//     return a.distance > b.distance;
+// }
+
+int Relax(vector<Node> &G, int source, int destnation, int weight)
 {
     /*
         @describtion: this is a common subrouting used to relax the edges under a condition:
@@ -62,10 +67,13 @@ void Relax(vector<Node> &G, int source, int destnation, int weight)
     {
         G[destnation].distance = G[source].distance + weight;
         G[destnation].parent = source;
+        return G[source].distance + weight;
     }
+
+    return 0;
 }
 
-vector<Node> Dijekstra(vector<pair<int, int>> &G, int source)
+vector<Node> Dijekstra(vector<vector<int>> &G, int source)
 {
     // define a vector of nodes, depending on no of verticies in the graph.
     int size = G.size();
@@ -78,7 +86,14 @@ vector<Node> Dijekstra(vector<pair<int, int>> &G, int source)
     vector<bool> finshedNodes(size);
 
     // create a priority queue to set the node with the minimum value at the front
-    priority_queue<Node, vector<Node>, greater<>> pq;
+    auto compareNode = [](const Node &a, const Node &b)
+    {
+        return a.distance > b.distance;
+    };
+    priority_queue<Node, vector<Node>, decltype(compareNode)> pq(compareNode);
+
+    // insert the sorce with distance = 0
+    pq.push(Graph[source]);
 
     // iterate over all the verticies
     while (pq.size())
@@ -88,8 +103,22 @@ vector<Node> Dijekstra(vector<pair<int, int>> &G, int source)
         pq.pop();
 
         // iterate over all its neighbours and mark them as finshed
-        for (auto nei : G[node.ID])
-            Relax(Graph, node.ID, nei, G[node.ID][nei]);
+        for (int j = 0; j < size; j++)
+        {
+            if (G[node.ID][j] != 0)
+            { // this means it is a neighbour
+                int res = Relax(Graph, node.ID, j, G[node.ID][j]);
+                if (res != 0)
+                {
+                    // Node newNei;
+                    // newNei.ID = j;
+                    // newNei.distance = res;
+                    // newNei.parent = node.ID;
+                    // pq.push(newNei);
+                    pq.push(Graph[j]);
+                }
+            }
+        }
 
         // mark this node as finshed
         finshedNodes[node.ID] = true;
@@ -98,12 +127,45 @@ vector<Node> Dijekstra(vector<pair<int, int>> &G, int source)
     return Graph;
 }
 
+void printGraph(const vector<vector<int>> &G)
+{
+    int sz = G.size();
+    for (int i = 0; i < sz; i++)
+    {
+        for (int j = 0; j < sz; j++)
+            cout << G[i][j] << ' ';
+        cout << endl;
+    }
+}
+
+vector<vector<int>> buildTheGraph()
+{
+    int noOfNodes, noOfEdges;
+    cin >> noOfNodes >> noOfEdges;
+    // matrix representation -> undirected
+    vector<vector<int>> G(noOfNodes, vector<int>(noOfNodes));
+
+    // reading the weights
+    for (int i = 0; i < noOfEdges; i++)
+    {
+        int src, dest, w;
+        cin >> src >> dest >> w;
+        G[--src][--dest] = w;
+        G[dest][src] = w;
+    }
+
+    printGraph(G);
+    return G;
+}
+
 int main()
 {
     DPsolver;
     // build the graph
     vector<vector<int>> graph = buildTheGraph();
     // call dijekstra
-
+    auto resGraph = Dijekstra(graph, 0);
+    for (auto node : resGraph)
+        cout << "Node#: " << node.ID + 1 << " -- Distance from source: " << node.distance << "\n";
     return 0;
 }
