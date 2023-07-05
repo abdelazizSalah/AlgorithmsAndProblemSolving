@@ -193,6 +193,9 @@ int main()
     // call dijekstra
     auto resGraph = Dijekstra(graph, 0);
     // solve the problem
-    CDijekstraProblemCodeForces(resGraph);
+    // CDijekstraProblemCodeForces(resGraph);
+    for (auto &node : resGraph)
+        cout << "node# " << node.ID << " --- distance from source is: " << node.distance << endl;
+
     return 0;
 }
