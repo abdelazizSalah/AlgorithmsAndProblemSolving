@@ -116,6 +116,7 @@ vector<Node> Dijekstra(vector<vector<int>> &G, int source)
     return Graph;
 }
 
+// O(V^2)
 void printGraph(const vector<vector<int>> &G)
 {
     int sz = G.size();
