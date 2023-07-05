@@ -103,7 +103,7 @@ vector<Node> Dijekstra(vector<vector<pair<int, int>>> &G, int source)
             if (nei.second != 0)
             { // this means it is a neighbour
                 int res = Relax(Graph, node.ID, nei.first, nei.second);
-                if (res != 0)
+                if (res != 0 && !finshedNodes[nei.first])
                     // this mean that we have applied the relaxation operation
                     pq.push(Graph[nei.first]);
             }
@@ -193,9 +193,6 @@ int main()
     // call dijekstra
     auto resGraph = Dijekstra(graph, 0);
     // solve the problem
-    // CDijekstraProblemCodeForces(resGraph);
-    for (auto &node : resGraph)
-        cout << "node# " << node.ID << " --- distance from source is: " << node.distance << endl;
-
+    CDijekstraProblemCodeForces(resGraph);
     return 0;
 }
