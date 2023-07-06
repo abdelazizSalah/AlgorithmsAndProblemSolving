@@ -48,7 +48,7 @@ void Initialize_single_source(vector<Node> &G, int source)
 }
 
 // O(1)
-int Relax(vector<Node> &G, int source, int destnation, int weight)
+bool Relax(vector<Node> &G, int source, int destnation, int weight)
 {
     /*
         @describtion: this is a common subrouting used to relax the edges under a condition:
@@ -59,21 +59,54 @@ int Relax(vector<Node> &G, int source, int destnation, int weight)
                 make the parent of the destination as the source
                 make the distance of the destination as the sum of the source distance and the weight
     */
-    if (G[source].distance + weight <= G[destnation].distance)
+    if (G[source].distance + weight < G[destnation].distance)
     {
         G[destnation].distance = G[source].distance + weight;
         G[destnation].parent = source;
-        return G[source].distance + weight;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-vector<Node> Dijekstra(vector<vector<pair<int, int>>> &G, int source)
+// O(V^2)
+void printGraph(const vector<vector<pair<int, int>>> &G)
+{
+    int sz = G.size();
+    for (int i = 0; i < sz; i++)
+    {
+        cout << "node# " << i + 1 << " neighbours: \n";
+        for (auto &nei : G[i])
+            cout << "neighbour ID: " << nei.first + 1 << " --- distance: " << nei.second << endl;
+    }
+}
+
+// O(E + V)
+void buildTheGraph(vector<vector<pair<int, int>>> &G)
+{
+    int noOfNodes, noOfEdges;
+    cin >> noOfNodes >> noOfEdges;
+    // matrix representation -> undirected
+    G = vector<vector<pair<int, int>>>(noOfNodes);
+
+    // reading the weights
+    for (int i = 0; i < noOfEdges; i++)
+    {
+        int src, dest, w;
+        cin >> src >> dest >> w;
+        G[--src].push_back({--dest, w});
+        G[dest].push_back({src, w});
+    }
+
+    // printGraph(G);
+    // return G;
+}
+
+void Dijekstra(const vector<vector<pair<int, int>>> &G, int source, vector<Node> &Graph)
 {
     // define a vector of nodes, depending on no of verticies in the graph.
     int size = G.size();
-    vector<Node> Graph(size);
+    // vector<Node> Graph(size);
 
     // initialize the graph
     Initialize_single_source(Graph, source); // O(V)
@@ -97,54 +130,19 @@ vector<Node> Dijekstra(vector<vector<pair<int, int>>> &G, int source)
         // extract the node with the minimum distance from the source
         Node node = pq.top();
         pq.pop();
-
+        if (finshedNodes[node.ID])
+            continue;
         // iterate over all its neighbours and mark them as finshed
         for (auto &nei : G[node.ID])
-            if (nei.second != 0)
-            { // this means it is a neighbour
-                int res = Relax(Graph, node.ID, nei.first, nei.second);
-                if (res != 0 && !finshedNodes[nei.first])
-                    // this mean that we have applied the relaxation operation
-                    pq.push(Graph[nei.first]);
-            }
+            if (Relax(Graph, node.ID, nei.first, nei.second))
+                // this mean that we have applied the relaxation operation
+                pq.push(Graph[nei.first]);
 
         // mark this node as finshed
         finshedNodes[node.ID] = true;
     }
 
-    return Graph;
-}
-
-// O(V^2)
-void printGraph(const vector<vector<pair<int, int>>> &G)
-{
-    int sz = G.size();
-    for (int i = 0; i < sz; i++)
-    {
-        cout << "node# " << i + 1 << " neighbours: \n";
-        for (auto &nei : G[i])
-            cout << "neighbour ID: " << nei.first + 1 << " --- distance: " << nei.second << endl;
-    }
-}
-
-// O(E + V)
-vector<vector<pair<int, int>>> buildTheGraph()
-{
-    int noOfNodes, noOfEdges;
-    cin >> noOfNodes >> noOfEdges;
-    // matrix representation -> undirected
-    vector<vector<pair<int, int>>> G(noOfNodes);
-
-    // reading the weights
-    for (int i = 0; i < noOfEdges; i++)
-    {
-        int src, dest, w;
-        cin >> src >> dest >> w;
-        G[--src].push_back({--dest, w});
-        G[dest].push_back({src, w});
-    }
-    // printGraph(G);
-    return G;
+    // return Graph;
 }
 
 // O(V)
@@ -160,6 +158,27 @@ void pathToNodeN(const vector<Node> &G, Node n)
     // recursive condition
     pathToNodeN(G, G[n.parent]);
     cout << n.ID + 1 << ' ';
+}
+
+void pathToNodeNIterative(const vector<Node> &G, Node n)
+{
+    vector<int> path; // Store the path nodes
+
+    // Traverse the path from node n to the root iteratively
+    while (n.parent != -1)
+    {
+        path.push_back(n.ID + 1); // Add current node ID to the path
+        n = G[n.parent];          // Move to the parent node
+    }
+
+    // Add the root node to the path
+    path.push_back(n.ID + 1);
+
+    // Print the path in reverse order
+    for (int i = path.size() - 1; i >= 0; i--)
+    {
+        cout << path[i] << ' ';
+    }
 }
 
 // O(V)
@@ -179,7 +198,7 @@ void CDijekstraProblemCodeForces(const vector<Node> &resGraph)
 
     */
     if (resGraph[resGraph.size() - 1].distance != INT_MAX)
-        pathToNodeN(resGraph, resGraph[resGraph.size() - 1]);
+        pathToNodeNIterative(resGraph, resGraph[resGraph.size() - 1]);
     else
         cout << -1;
 }
@@ -189,9 +208,11 @@ int main()
 {
     DPsolver;
     // build the graph
-    vector<vector<pair<int, int>>> graph = buildTheGraph();
+    vector<vector<pair<int, int>>> graph;
+    buildTheGraph(graph);
     // call dijekstra
-    auto resGraph = Dijekstra(graph, 0);
+    vector<Node> resGraph(graph.size());
+    Dijekstra(graph, 0, resGraph);
     // solve the problem
     CDijekstraProblemCodeForces(resGraph);
     return 0;
