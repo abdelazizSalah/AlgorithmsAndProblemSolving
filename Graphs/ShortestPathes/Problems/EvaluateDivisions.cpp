@@ -35,7 +35,7 @@ void removeCommonChars(vector<vector<string>> &equations)
             mnSize = len1;
             for (int i = 0; i < mnSize; i++)
                 for (int j = 0; j < len2; j++)
-                    if (first[i] == second[j] && first.size() > 1 && second.size() > 1)
+                    if (first[i] == second[j])
                         first.erase(i--, 1), second.erase(j--, 1), mnSize--, len2--;
             eq[0] = first;
             eq[1] = second;
@@ -45,7 +45,7 @@ void removeCommonChars(vector<vector<string>> &equations)
             mnSize = len2;
             for (int i = 0; i < mnSize; i++)
                 for (int j = 0; j < len1; j++)
-                    if (first[j] == second[i] && first.size() > 1 && second.size() > 1)
+                    if (first[j] == second[i])
                         first.erase(j--, 1), second.erase(i--, 1), mnSize--, len1--;
 
             eq[0] = first;
@@ -76,7 +76,7 @@ map<string, int> alphaNum;
 void buildGraph(const vector<vector<string>> &equations, const vector<double> &values, vector<vector<double>> &G)
 {
 
-    G = vector<vector<double>>(26, vector<double>(26));
+    G = vector<vector<double>>(27, vector<double>(27));
     // building the graph in matrix form.
     int noOfEdges = equations.size();
     for (int j = 0; j < noOfEdges; j++)
@@ -84,8 +84,11 @@ void buildGraph(const vector<vector<string>> &equations, const vector<double> &v
         // directed under condition
         G[alphaNum[equations[j][0]]][alphaNum[equations[j][1]]] = values[j];     // A / B
         G[alphaNum[equations[j][1]]][alphaNum[equations[j][0]]] = 1 / values[j]; // B / A
-        G[alphaNum[equations[j][0]]][alphaNum[equations[j][0]]] = 1;             // A/A
-        G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1;             // B/B
+        if (equations[j][0].size() && equations[0][j].size())
+        {
+            G[alphaNum[equations[j][0]]][alphaNum[equations[j][0]]] = 1; // A/A
+            G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1; // B/B
+        }
     }
     printGraph(G);
 }
@@ -100,11 +103,11 @@ ld roundToNdecimalPlaces(ld num, int places)
     return num;
 }
 
-vector<ld> dist(26, INT_MAX);
+vector<ld> dist(27, INT_MAX);
 void dijekstra(const vector<vector<double>> &G, int src)
 {
-    dist = vector<ld>(26, INT_MAX);
-    vector<int> parent(26, -1);
+    dist = vector<ld>(27, INT_MAX);
+    vector<int> parent(27, -1);
     // lets build dijekstra using madabelo's Code.
     dist[src] = 1;
     parent[src] = -1;
@@ -117,13 +120,13 @@ void dijekstra(const vector<vector<double>> &G, int src)
         pq.pop();
         if (curent_cost > dist[node])
             continue;
-        for (int x = 0; x < 26; x++)
+        for (int x = 0; x < 27; x++)
         {
             // check for neighbour
             if (G[node][x] > 0)
             {
                 int next = x;
-                ld next_cost = roundToNdecimalPlaces(curent_cost * G[node][x], 3);
+                ld next_cost = roundToNdecimalPlaces(curent_cost * G[node][x], 5);
                 if (next_cost < dist[next])
                 {
                     pq.push({next_cost, next});
@@ -144,13 +147,14 @@ equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0]
 int main()
 {
     // building the map
-    int i = 0;
+    int i = 1;
+    alphaNum[""] = 1;
     for (char a = 'a'; a <= 'z'; a++)
         alphaNum[string(1, a)] = i++;
-    vector<vector<string>> equations = {{"a", "b"}};
-    vector<double> values = {0.5};
+    vector<vector<string>> equations = {{"a", "aa"}};
+    vector<double> values = {9.0};
     vector<vector<double>> G;
-    vector<vector<string>> queries = {{"a", "b"}, {"b", "a"}, {"a", "c"}, {"x", "y"}};
+    vector<vector<string>> queries = {{"aa", "a"}, {"aa", "aa"}};
     preprocessing(equations, queries);
     buildGraph(equations, values, G);
     for (auto q : queries)
