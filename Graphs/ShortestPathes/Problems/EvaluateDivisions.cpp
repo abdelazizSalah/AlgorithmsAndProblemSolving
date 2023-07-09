@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define DPSolver ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
-
+using ld = long double;
 void readingInput(vector<vector<string>> &equations, vector<double> &values, vector<vector<string>> &queries)
 {
     int noOfEquations, noOfQueries;
@@ -90,8 +90,39 @@ void buildGraph(const vector<vector<string>> &equations, const vector<double> &v
         G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1;             // B/B
     }
 }
-
-void dijekstra();
+vector<ld> dist(26, INT_MAX);
+vector<int> parent(26, -1);
+void dijekstra(const vector<vector<double>> &G, int src)
+{
+    // lets build dijekstra using madabelo's Code.
+    dist[src] = 0;
+    parent[src] = -1;
+    priority_queue<pair<ld, int>, vector<pair<ld, int>>, greater<>> pq;
+    pq.push({0, src});
+    while (pq.size())
+    {
+        ld curent_cost = pq.top().first;
+        ld node = pq.top().second;
+        pq.pop();
+        if (curent_cost > dist[node])
+            continue;
+        for (int x = 0; x < 26; x++)
+        {
+            // check for neighbour
+            if (G[node][x] > 0)
+            {
+                int next = x;
+                ld next_cost = curent_cost * G[node][x];
+                if (next_cost < dist[next])
+                {
+                    pq.push({next_cost, next});
+                    parent[next] = node;
+                    dist[next] = next_cost;
+                }
+            }
+        }
+    }
+}
 
 /*
 
