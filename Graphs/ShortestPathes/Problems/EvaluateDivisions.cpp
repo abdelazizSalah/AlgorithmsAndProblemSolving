@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cmath>
 using namespace std;
 #define DPSolver ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 using ld = long double;
@@ -71,6 +72,7 @@ void printGraph(const vector<vector<double>> &G)
     }
 }
 
+map<string, int> alphaNum;
 void buildGraph(const vector<vector<string>> &equations, const vector<double> &values, vector<vector<double>> &G)
 {
 
@@ -86,7 +88,6 @@ void buildGraph(const vector<vector<string>> &equations, const vector<double> &v
         G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1;             // B/B
     }
 }
-map<string, int> alphaNum;
 vector<ld> dist(26, INT_MAX);
 void dijekstra(const vector<vector<double>> &G, int src)
 {
@@ -110,7 +111,7 @@ void dijekstra(const vector<vector<double>> &G, int src)
             if (G[node][x] > 0)
             {
                 int next = x;
-                ld next_cost = curent_cost * G[node][x];
+                ld next_cost = round(curent_cost * G[node][x]) / 1000.0;
                 if (next_cost < dist[next])
                 {
                     pq.push({next_cost, next});
@@ -137,13 +138,16 @@ int main()
     vector<vector<string>> equations = {{"a", "b"}, {"b", "c"}, {"bc", "cd"}};
     vector<double> values = {1.5, 2.5, 5.0};
     vector<vector<double>> G;
-    removeCommonChars(equations);
+    vector<vector<string>> queries = {{"a", "c"}, {"c", "b"}, {"bc", "cd"}, {"cd", "bc"}};
+    preprocessing(equations, queries);
     buildGraph(equations, values, G);
-    vector<vector<string>> queries = {{"a", "c"}, {"b", "a"}, {"a", "e"}, {"a", "a"}, {"x", "x"}};
     for (auto q : queries)
     {
         dijekstra(G, alphaNum[q[0]]);
-        cout << dist[alphaNum[q[1]]];
+        if (dist[alphaNum[q[1]]] != INT_MAX)
+            cout << dist[alphaNum[q[1]]];
+        else
+            cout << -1.00000;
     }
 }
 // int main()
