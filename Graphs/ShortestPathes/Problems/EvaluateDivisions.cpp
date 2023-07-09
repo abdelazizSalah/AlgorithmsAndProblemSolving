@@ -57,18 +57,54 @@ void preprocessing(vector<vector<string>> &equations, vector<vector<string>> &qu
 {
     removeCommonChars(equations);
     removeCommonChars(queries);
+
+    //? TODO: cover the case of abc/xyz
 }
 
-void buildGraph();
+void printGraph(const vector<vector<double>> &G)
+{
+    for (auto node : G)
+    {
+        for (auto val : node)
+            cout << val << ' ';
+        cout << '\n';
+    }
+}
+
+void buildGraph(const vector<vector<string>> &equations, const vector<double> &values, vector<vector<double>> &G)
+{
+    // building the map
+    map<string, int> alphaNum;
+    int i = 0;
+    for (char a = 'a'; a <= 'z'; a++)
+        alphaNum[string(1, a)] = i++;
+    G = vector<vector<double>>(26, vector<double>(26));
+    // building the graph in matrix form.
+    int noOfEdges = equations.size();
+    for (int j = 0; j < noOfEdges; j++)
+    {
+        // directed under condition
+        G[alphaNum[equations[j][0]]][alphaNum[equations[j][1]]] = values[j];     // A / B
+        G[alphaNum[equations[j][1]]][alphaNum[equations[j][0]]] = 1 / values[j]; // B / A
+        G[alphaNum[equations[j][0]]][alphaNum[equations[j][0]]] = 1;             // A/A
+        G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1;             // B/B
+    }
+}
 
 void dijekstra();
 
+/*
+
+equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0]
+*/
+
 int main()
 {
-    vector<vector<string>> v = {{"abc", "bc"}, {"xyz", "zzzzz"}};
-    removeCommonChars(v);
-    for (auto c : v)
-        cout << c[0] << " ---- " << c[1];
+    vector<vector<string>> equations = {{"a", "b"}, {"b", "c"}, {"bc", "cd"}};
+    vector<double> values = {1.5, 2.5, 5.0};
+    vector<vector<double>> G;
+    removeCommonChars(equations);
+    buildGraph(equations, values, G);
 }
 // int main()
 // {
