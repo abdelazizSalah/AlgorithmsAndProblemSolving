@@ -35,7 +35,7 @@ void removeCommonChars(vector<vector<string>> &equations)
             mnSize = len1;
             for (int i = 0; i < mnSize; i++)
                 for (int j = 0; j < len2; j++)
-                    if (first[i] == second[j])
+                    if (first[i] == second[j] && first.size() > 1 && second.size() > 1)
                         first.erase(i--, 1), second.erase(j--, 1), mnSize--, len2--;
             eq[0] = first;
             eq[1] = second;
@@ -45,7 +45,7 @@ void removeCommonChars(vector<vector<string>> &equations)
             mnSize = len2;
             for (int i = 0; i < mnSize; i++)
                 for (int j = 0; j < len1; j++)
-                    if (first[j] == second[i])
+                    if (first[j] == second[i] && first.size() > 1 && second.size() > 1)
                         first.erase(j--, 1), second.erase(i--, 1), mnSize--, len1--;
 
             eq[0] = first;
@@ -87,7 +87,19 @@ void buildGraph(const vector<vector<string>> &equations, const vector<double> &v
         G[alphaNum[equations[j][0]]][alphaNum[equations[j][0]]] = 1;             // A/A
         G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1;             // B/B
     }
+    printGraph(G);
 }
+
+ld roundToNdecimalPlaces(ld num, int places)
+{
+    int mult = 1;
+    for (int i = 0; i < places; i++)
+        mult *= 10;
+    num = round(num * mult);
+    num /= mult;
+    return num;
+}
+
 vector<ld> dist(26, INT_MAX);
 void dijekstra(const vector<vector<double>> &G, int src)
 {
@@ -111,7 +123,7 @@ void dijekstra(const vector<vector<double>> &G, int src)
             if (G[node][x] > 0)
             {
                 int next = x;
-                ld next_cost = round(curent_cost * G[node][x]) / 1000.0;
+                ld next_cost = roundToNdecimalPlaces(curent_cost * G[node][x], 3);
                 if (next_cost < dist[next])
                 {
                     pq.push({next_cost, next});
@@ -135,30 +147,23 @@ int main()
     int i = 0;
     for (char a = 'a'; a <= 'z'; a++)
         alphaNum[string(1, a)] = i++;
-    vector<vector<string>> equations = {{"a", "b"}, {"b", "c"}, {"bc", "cd"}};
-    vector<double> values = {1.5, 2.5, 5.0};
+    vector<vector<string>> equations = {{"a", "b"}};
+    vector<double> values = {0.5};
     vector<vector<double>> G;
-    vector<vector<string>> queries = {{"a", "c"}, {"c", "b"}, {"bc", "cd"}, {"cd", "bc"}};
+    vector<vector<string>> queries = {{"a", "b"}, {"b", "a"}, {"a", "c"}, {"x", "y"}};
     preprocessing(equations, queries);
     buildGraph(equations, values, G);
     for (auto q : queries)
     {
-        dijekstra(G, alphaNum[q[0]]);
-        if (dist[alphaNum[q[1]]] != INT_MAX)
-            cout << dist[alphaNum[q[1]]];
-        else
-            cout << -1.00000;
+        if (G[alphaNum[q[0]]][alphaNum[q[0]]])
+        {
+            dijekstra(G, alphaNum[q[0]]);
+            if (dist[alphaNum[q[1]]] != INT_MAX)
+                cout << dist[alphaNum[q[1]]] << ' ';
+            else
+                cout << -1.00000 << ' ';
+        }
+        else // does not exist so for sure -1
+            cout << -1.00000 << ' ';
     }
 }
-// int main()
-// {
-//     DPSolver;
-//     vector<vector<string>> equations;
-//     vector<double> values;
-//     vector<vector<string>> queries;
-//     readingInput(equations, values, queries);
-//     preprocessing(equations, queries);
-//     buildGraph();
-//     dijekstra();
-//     return 0;
-// }
