@@ -73,11 +73,7 @@ void printGraph(const vector<vector<double>> &G)
 
 void buildGraph(const vector<vector<string>> &equations, const vector<double> &values, vector<vector<double>> &G)
 {
-    // building the map
-    map<string, int> alphaNum;
-    int i = 0;
-    for (char a = 'a'; a <= 'z'; a++)
-        alphaNum[string(1, a)] = i++;
+
     G = vector<vector<double>>(26, vector<double>(26));
     // building the graph in matrix form.
     int noOfEdges = equations.size();
@@ -90,15 +86,17 @@ void buildGraph(const vector<vector<string>> &equations, const vector<double> &v
         G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1;             // B/B
     }
 }
+map<string, int> alphaNum;
 vector<ld> dist(26, INT_MAX);
-vector<int> parent(26, -1);
 void dijekstra(const vector<vector<double>> &G, int src)
 {
+    dist = vector<ld>(26, INT_MAX);
+    vector<int> parent(26, -1);
     // lets build dijekstra using madabelo's Code.
-    dist[src] = 0;
+    dist[src] = 1;
     parent[src] = -1;
     priority_queue<pair<ld, int>, vector<pair<ld, int>>, greater<>> pq;
-    pq.push({0, src});
+    pq.push({1, src});
     while (pq.size())
     {
         ld curent_cost = pq.top().first;
@@ -127,15 +125,26 @@ void dijekstra(const vector<vector<double>> &G, int src)
 /*
 
 equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0]
+[["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
 */
 
 int main()
 {
+    // building the map
+    int i = 0;
+    for (char a = 'a'; a <= 'z'; a++)
+        alphaNum[string(1, a)] = i++;
     vector<vector<string>> equations = {{"a", "b"}, {"b", "c"}, {"bc", "cd"}};
     vector<double> values = {1.5, 2.5, 5.0};
     vector<vector<double>> G;
     removeCommonChars(equations);
     buildGraph(equations, values, G);
+    vector<vector<string>> queries = {{"a", "c"}, {"b", "a"}, {"a", "e"}, {"a", "a"}, {"x", "x"}};
+    for (auto q : queries)
+    {
+        dijekstra(G, alphaNum[q[0]]);
+        cout << dist[alphaNum[q[1]]];
+    }
 }
 // int main()
 // {
