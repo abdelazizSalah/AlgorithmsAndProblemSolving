@@ -3,13 +3,13 @@
 using namespace std;
 #define DPSolver ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 using ld = long double;
-void readingInput(vector<vector<string>> &equations, vector<double> &values, vector<vector<string>> &queries)
+void readingInput(vector<vector<string>> &equations, vector<ld> &values, vector<vector<string>> &queries)
 {
     int noOfEquations, noOfQueries;
     cin >> noOfEquations >> noOfQueries;
     equations = vector<vector<string>>(noOfEquations);
     queries = vector<vector<string>>(noOfQueries);
-    values = vector<double>(noOfEquations);
+    values = vector<ld>(noOfEquations);
     for (auto &vec : equations)
         cin >> vec[0] >> vec[1];
     for (auto &vec : queries)
@@ -62,33 +62,33 @@ void preprocessing(vector<vector<string>> &equations, vector<vector<string>> &qu
     //? TODO: cover the case of abc/xyz
 }
 
-void printGraph(const vector<vector<double>> &G)
+void printGraph(map<string, vector<pair<string, ld>>> &G)
 {
     for (auto node : G)
     {
-        for (auto val : node)
-            cout << val << ' ';
-        cout << '\n';
+        cout << "neighbours of " << node.first << " are: \n";
+        for (auto nei : G[node.first])
+            cout << nei.first << ' ' << nei.second << " ----- ";
+        cout << endl;
     }
 }
 
 map<string, int> alphaNum;
-void buildGraph(const vector<vector<string>> &equations, const vector<double> &values, vector<vector<double>> &G)
+void buildGraph(const vector<vector<string>> &equations, const vector<ld> &values, map<string, vector<pair<string, ld>>> &G)
 {
-
-    G = vector<vector<double>>(27, vector<double>(27));
+    // G = vector<vector<ld>>(27, vector<ld>(27));
     // building the graph in matrix form.
+    // cout << G["ahmed"][0].first;
     int noOfEdges = equations.size();
     for (int j = 0; j < noOfEdges; j++)
     {
-        // directed under condition
-        G[alphaNum[equations[j][0]]][alphaNum[equations[j][1]]] = values[j];     // A / B
-        G[alphaNum[equations[j][1]]][alphaNum[equations[j][0]]] = 1 / values[j]; // B / A
-        if (equations[j][0].size() && equations[0][j].size())
-        {
-            G[alphaNum[equations[j][0]]][alphaNum[equations[j][0]]] = 1; // A/A
-            G[alphaNum[equations[j][1]]][alphaNum[equations[j][1]]] = 1; // B/B
-        }
+        // add yourself if you were not here before.
+        if (!G[equations[j][0]].size())
+            G[equations[j][0]].push_back({equations[j][0], 1}); // A / A = 1
+        if (!G[equations[j][1]].size())
+            G[equations[j][1]].push_back({equations[j][1], 1});         // B / B = 1
+        G[equations[j][0]].push_back({equations[j][1], values[j]});     // A / B
+        G[equations[j][1]].push_back({equations[j][0], 1 / values[j]}); // B / A
     }
     printGraph(G);
 }
@@ -103,36 +103,40 @@ ld roundToNdecimalPlaces(ld num, int places)
     return num;
 }
 
-vector<ld> dist(27, INT_MAX);
-void dijekstra(const vector<vector<double>> &G, int src)
+void initializeSource(string src, map<string, vector<pair<string, ld>>> &G, map<string, ld> &dist)
 {
-    dist = vector<ld>(27, INT_MAX);
-    vector<int> parent(27, -1);
-    // lets build dijekstra using madabelo's Code.
+    // iterate over all nodes in the graph
+    for (auto node : G)
+    {
+        dist[node.first] = INT_MAX;
+    }
     dist[src] = 1;
-    parent[src] = -1;
-    priority_queue<pair<ld, int>, vector<pair<ld, int>>, greater<>> pq;
+}
+
+map<string, ld> dist;
+void dijekstra(map<string, vector<pair<string, ld>>> &G, string src)
+{
+    // initializing the distances;
+    // map<string, ld> dist;
+    // lets build dijekstra using madabelo's Code.
+    priority_queue<pair<ld, string>, vector<pair<ld, string>>, greater<>> pq;
     pq.push({1, src});
     while (pq.size())
     {
         ld curent_cost = pq.top().first;
-        ld node = pq.top().second;
+        string node = pq.top().second;
         pq.pop();
         if (curent_cost > dist[node])
             continue;
-        for (int x = 0; x < 27; x++)
+        for (auto nei : G[node])
         {
             // check for neighbour
-            if (G[node][x] > 0)
+            string next = nei.first;
+            ld next_cost = roundToNdecimalPlaces(curent_cost * nei.second, 5);
+            if (next_cost < dist[next])
             {
-                int next = x;
-                ld next_cost = roundToNdecimalPlaces(curent_cost * G[node][x], 5);
-                if (next_cost < dist[next])
-                {
-                    pq.push({next_cost, next});
-                    parent[next] = node;
-                    dist[next] = next_cost;
-                }
+                pq.push({next_cost, next});
+                dist[next] = next_cost;
             }
         }
     }
@@ -147,23 +151,20 @@ equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0]
 int main()
 {
     // building the map
-    int i = 1;
-    alphaNum[""] = 1;
-    for (char a = 'a'; a <= 'z'; a++)
-        alphaNum[string(1, a)] = i++;
     vector<vector<string>> equations = {{"a", "aa"}};
-    vector<double> values = {9.0};
-    vector<vector<double>> G;
-    vector<vector<string>> queries = {{"aa", "a"}, {"aa", "aa"}};
-    preprocessing(equations, queries);
+    vector<ld> values = {0.5};
+    map<string, vector<pair<string, ld>>> G;
     buildGraph(equations, values, G);
+    vector<vector<string>> queries = {{"a", "aa"}, {"aa", "aa"}};
+    // // preprocessing(equations, queries);
     for (auto q : queries)
     {
-        if (G[alphaNum[q[0]]][alphaNum[q[0]]])
+        if (G[q[0]].size() && G[q[1]].size()) // both exist in the graph
         {
-            dijekstra(G, alphaNum[q[0]]);
-            if (dist[alphaNum[q[1]]] != INT_MAX)
-                cout << dist[alphaNum[q[1]]] << ' ';
+            initializeSource(q[0], G, dist);
+            dijekstra(G, q[0]);
+            if (dist[q[1]] != INT_MAX)
+                cout << dist[q[1]] << ' ';
             else
                 cout << -1.00000 << ' ';
         }
