@@ -25,20 +25,26 @@ bool validIndx(int i, int j, int m, int n)
 {
     return i < n && j < m && i >= 0 && j >= 0;
 }
-int tabulation(int n, int m)
+int tabulation(const vector<vector<int>> &grid, int n, int m)
 {
     vector<vector<int>> table(n, vector<int>(m));
-    table[n - 1][m - 1] = 1;
+    table[n - 1][m - 1] = grid[n - 1][m - 1];
     for (int j = n - 1; j >= 0; j--)
         for (int k = m - 1; k >= 0; k--)
         {
+            if (j == n - 1 && k == m - 1)
+                continue;
+            int rightPath = INT_MAX;
+            int downPath = INT_MAX;
             // check on right
             if (validIndx(j, k + 1, m, n))
-                table[j][k] += table[j][k + 1];
+                rightPath = table[j][k + 1];
 
             // check on down
             if (validIndx(j + 1, k, m, n))
-                table[j][k] += table[j + 1][k];
+                downPath = table[j + 1][k];
+
+            table[j][k] = grid[j][k] + min(rightPath, downPath);
         }
 
     return table[0][0];
@@ -49,6 +55,10 @@ int main()
     DPSolver;
     int n, m;
     cin >> n >> m;
-    cout << tabulation(n, m);
+    vector<vector<int>> table(n, vector<int>(m));
+    for (auto &it : table)
+        for (auto &it2 : it)
+            cin >> it2;
+    cout << tabulation(table, n, m);
     return 0;
 }
