@@ -27,28 +27,31 @@ bool canInsert(pair<int, char> neighbour, char nodeColor)
 
 void bfs(const vector<vector<pair<int, char>>> &G, vector<int> &distances, vector<bool> &vis)
 {
+
     queue<pair<int, char>> queue;
     queue.push({0, 'b'});
-    int lvl = 1;
+    int lvl = 0;
     while (queue.size())
     {
-        // extract the node from the queue
-        auto node = queue.front();
-        queue.pop();
-        for (auto nei : G[node.first])
-            // insert the neibour into the queue under our condition
-            if (canInsert(nei, node.second))
-            {
-                // insert into the queue
-                queue.push(nei);
-
-                // set the distance of the neighbour
-                distances[nei.first] = lvl;
-            }
-        // mark the node as finshed
-        vis[node.first] = true;
-
-        // increment the level.
+        int sz = queue.size();
+        while (sz--)
+        {
+            // extract the node from the queue
+            auto node = queue.front();
+            queue.pop();
+            for (auto nei : G[node.first])
+                // insert the neibour into the queue under our condition
+                if (canInsert(nei, node.second))
+                {
+                    // insert into the queue
+                    queue.push(nei);
+                }
+            // mark the node as finshed
+            vis[node.first] = true;
+            // set the distance of the neighbour
+            distances[node.first] = lvl;
+        }
+        // after finishing that level go the next one.
         lvl++;
     }
 }
@@ -58,7 +61,7 @@ void printGraph(const vector<vector<pair<int, char>>> &G)
     {
         cout << "Neighbours of node " << i << " are: \n";
         for (auto nei : G[i])
-            cout << "nei #: " << nei.first << " with edge color: " << nei.second;
+            cout << "nei #: " << nei.first << " with edge color: " << nei.second << '\n';
         cout << endl;
     }
 }
