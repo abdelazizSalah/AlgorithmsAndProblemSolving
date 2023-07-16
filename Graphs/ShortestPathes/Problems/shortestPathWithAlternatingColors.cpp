@@ -20,9 +20,9 @@
 using namespace std;
 #define DPSolver ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
 
-bool canInsert(pair<int, char> neighbour, char nodeColor)
+bool canInsert(pair<int, char> neighbour, pair<int, char> node)
 {
-    return nodeColor != neighbour.second;
+    return neighbour.first != 0 && node.first != neighbour.first && node.second != neighbour.second;
 }
 
 void bfs(const vector<vector<pair<int, char>>> &G, vector<int> &distances, vector<bool> &vis)
@@ -41,7 +41,7 @@ void bfs(const vector<vector<pair<int, char>>> &G, vector<int> &distances, vecto
             queue.pop();
             for (auto nei : G[node.first])
                 // insert the neibour into the queue under our condition
-                if (canInsert(nei, node.second))
+                if (!vis[nei.first] && canInsert(nei, node))
                 {
                     // insert into the queue
                     queue.push(nei);
