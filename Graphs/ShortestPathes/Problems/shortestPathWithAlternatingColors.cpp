@@ -22,14 +22,14 @@ using namespace std;
 
 bool canInsert(pair<int, char> neighbour, pair<int, char> node)
 {
-    return neighbour.first != 0 && node.first != neighbour.first && node.second != neighbour.second;
+    return node.second != neighbour.second;
 }
 
-void bfs(const vector<vector<pair<int, char>>> &G, vector<int> &distances, vector<bool> &vis)
+void bfs(const vector<vector<pair<int, char>>> &G, vector<int> &distances, vector<bool> &visitedBlue, vector<bool> &visitedRed)
 {
 
     queue<pair<int, char>> queue;
-    queue.push({0, 'b'});
+    queue.push({0, 'x'});
     int lvl = 0;
     while (queue.size())
     {
@@ -40,12 +40,27 @@ void bfs(const vector<vector<pair<int, char>>> &G, vector<int> &distances, vecto
             auto node = queue.front();
             queue.pop();
             for (auto nei : G[node.first])
-                // insert the neibour into the queue under our condition
-                if (!vis[nei.first] && canInsert(nei, node))
+            {
+                if (nei.second == 'B')
                 {
-                    // insert into the queue
-                    queue.push(nei);
+
+                    // insert the neibour into the queue under our condition
+                    if (!visitedBlue[nei.first] && canInsert(nei, node))
+                    {
+                        // insert into the queue
+                        queue.push(nei);
+                    }
                 }
+                else
+                {
+                    // insert the neibour into the queue under our condition
+                    if (!visitedRed[nei.first] && canInsert(nei, node))
+                    {
+                        // insert into the queue
+                        queue.push(nei);
+                    }
+                }
+            }
             // mark the node as finshed
             vis[node.first] = true;
             // set the distance of the neighbour
