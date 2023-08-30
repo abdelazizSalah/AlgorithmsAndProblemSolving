@@ -53,7 +53,7 @@ bool Relax(vector<Node> &G, int source, int destnation, int weight)
     /*
         @describtion: this is a common subrouting used to relax the edges under a condition:
                         if the weight from the source and the distance of the source was
-                        less than or equal to the distance of the destination then we should
+                        less than the distance of the destination then we should
                         apply the relaxation operation
         @algorithm:
                 make the parent of the destination as the source
