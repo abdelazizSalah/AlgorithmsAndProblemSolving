@@ -23,13 +23,11 @@ int carFleet(int target, vector<int> &position, vector<int> &speed)
         numberOfSteps[i] = (target - pr[i].first) / (float)pr[i].second;
 
     for (int i = position.size() - 1; i > 0; i--)
-    {
         if (numberOfSteps[i] >= numberOfSteps[i - 1])
         {
             numberOfFleets--;
             numberOfSteps[i - 1] = numberOfSteps[i];
         }
-    }
 
     return numberOfFleets;
 }
