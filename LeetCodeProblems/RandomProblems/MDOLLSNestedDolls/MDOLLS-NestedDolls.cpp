@@ -7,13 +7,26 @@ bool getBigger(pair<pair<int, int>, vector<int>> &p1, pair<pair<int, int>, vecto
     return p1.second.size() >= p2.second.size();
 }
 
+map<pair<int, int>, pair<pair<int, int>, vector<int>>> memo;
 pair<pair<int, int>, vector<int>> countMaxDolls(vector<pair<int, int>> &dolls, const int m, vector<bool> &taken, int idx)
 {
+    // make it efficient
+    auto it = memo.find(dolls[idx]);
+    if (it != memo.end())
+        return it->second;
+    // make it work
+
     // define base case
     if (idx >= m)
+    {
+        memo[{idx, idx}] = {{INT_MAX, INT_MAX}, {}};
         return {{INT_MAX, INT_MAX}, {}};
+    }
     else if (idx == m - 1)
+    {
+        memo[dolls[idx]] = {dolls[idx], {idx}};
         return {dolls[idx], {idx}};
+    }
 
     // normal case
     priority_queue<pair<pair<int, int>, vector<int>>> PossibleResults;
@@ -47,6 +60,7 @@ pair<pair<int, int>, vector<int>> countMaxDolls(vector<pair<int, int>> &dolls, c
                 if (dolls[idx].first > top.first.first && dolls[idx].second > top.first.second)
                 {
                     top.second.push_back(idx);
+                    memo[dolls[idx]] = {dolls[idx], {idx}};
                     return {dolls[idx], top.second};
                 }
             }
@@ -55,15 +69,19 @@ pair<pair<int, int>, vector<int>> countMaxDolls(vector<pair<int, int>> &dolls, c
         return top;
     }
     else
-
+    {
+        memo[dolls[idx]] = {dolls[idx], {idx}};
         return {dolls[idx], {idx}};
+    }
 }
 
 void solve()
 {
+    memo = map<pair<int, int>, pair<pair<int, int>, vector<int>>>();
     int m;
     cin >> m;
     vector<pair<int, int>> dolls(m);
+
     for (int i = 0; i < m; i++)
     {
         int w, h;
@@ -83,7 +101,7 @@ void solve()
             for (auto idx : R.second)
                 taken[idx] = true;
             if (taken[i] == 0)
-                auto R = countMaxDolls(dolls, m, taken, i);
+                continue;
             else
                 i++;
 
@@ -100,6 +118,7 @@ void solve()
 
 int main()
 {
+    DPSolver;
     int t;
     cin >> t;
     while (t--)
