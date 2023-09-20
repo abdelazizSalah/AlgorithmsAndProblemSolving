@@ -13,8 +13,19 @@ struct TreeNode
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 
-int diameterOfBinaryTreeWithBool(TreeNode *root, bool &strt, int &mx, int cntr)
+int diameterOfBinaryTreeWithBool(TreeNode *root, int &mx)
 {
     if (root == nullptr)
         return -1;
@@ -24,8 +35,8 @@ int diameterOfBinaryTreeWithBool(TreeNode *root, bool &strt, int &mx, int cntr)
         return 0;
     }
 
-    int left = diameterOfBinaryTreeWithBool(root->left, strt, mx, cntr + strt);
-    int right = diameterOfBinaryTreeWithBool(root->right, strt, mx, left + strt);
+    int left = diameterOfBinaryTreeWithBool(root->left, mx);
+    int right = diameterOfBinaryTreeWithBool(root->right, mx);
     int h = 1 + max(left, right);
     int d = left + right + 1 + 1;
     mx = max(d, mx);
@@ -34,10 +45,9 @@ int diameterOfBinaryTreeWithBool(TreeNode *root, bool &strt, int &mx, int cntr)
 int diameterOfBinaryTree(TreeNode *root)
 {
     DPSolver;
-    bool strt = false;
     int mx = INT_MIN;
     int cntr = 0;
-    diameterOfBinaryTreeWithBool(root, strt, mx, cntr);
+    diameterOfBinaryTreeWithBool(root, mx);
     return mx;
 }
 
