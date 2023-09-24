@@ -55,5 +55,10 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
+  "files.associations": {
+    "deque": "cpp",
+    "string": "cpp",
+    "vector": "cpp"
+  },
   // "C_Cpp.errorSquiggles": "disabled"
 }
