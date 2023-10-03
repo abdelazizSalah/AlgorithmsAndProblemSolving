@@ -5,6 +5,16 @@ using namespace std;
 class KthLargest
 {
 public:
+    int findKthLargest(vector<int> &nums, int k)
+    {
+        DPSolver;
+        // this select a position, and sort the elements arround it.
+        // all the elements which are less than it, will be on its left
+        // all the elements which are larger than it will be on its right.
+        nth_element(nums.begin(), nums.end() - k, nums.end());
+
+        return nums[nums.size() - k];
+    }
     KthLargest(int k, vector<int> &nums)
     {
         this->kVal = k;
