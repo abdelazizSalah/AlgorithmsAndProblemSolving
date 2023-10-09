@@ -26,12 +26,6 @@ bool backtracking(const vector<vector<char>> &board, vector<vector<bool>> &vis, 
     // marking visited
     vis[i][j] = true;
 
-    // trying 4 directions
-    // bool right = false;
-    // bool left = false;
-    // bool down = false;
-    // bool up = false;
-
     // compact way of writing the logic
     bool can = false;
     for (int k = 0; k < dx.size(); k++)
@@ -41,6 +35,12 @@ bool backtracking(const vector<vector<char>> &board, vector<vector<bool>> &vis, 
         if (board[i][j] == trgt[s.length()])
             can = backtracking(board, vis, trgt, m, n, i + dx[k], j + dy[k], s + board[i][j]);
     }
+
+    // trying 4 directions
+    // bool right = false;
+    // bool left = false;
+    // bool down = false;
+    // bool up = false;
 
     // if (board[i][j] == trgt[s.length()])
     //     right = backtracking(board, vis, trgt, m, n, i, j + 1, s + board[i][j]);
@@ -65,6 +65,7 @@ bool backtracking(const vector<vector<char>> &board, vector<vector<bool>> &vis, 
 
     // if (up)
     //     return true;
+
     // applying backtracking
     vis[i][j] = false;
     return can;
