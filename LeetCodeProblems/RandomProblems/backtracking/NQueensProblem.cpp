@@ -8,19 +8,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define DPSolver ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-// These are the all possible movements for a hourse
-map<string, pair<int, int>> horsePossibleDirs = {
-    {"UR", {-2, 1}},
-    {"UL", {-2, -1}},
-    {"RU", {-1, 2}},
-    {"RD", {1, 2}},
-    //!-------------
-    {"DR", {2, 1}},
-    {"DL", {2, -1}},
-    {"LU", {-1, -2}},
-    {"LD", {1, -2}},
-
-};
 // This checks if we are inside the board or not.
 bool validIdx(int i, int j, int n)
 {
@@ -34,6 +21,10 @@ vector<pair<int, int>> diagMovements = {
     {1, 1},
 };
 
+// This is responsible for marking all gaurded cells.
+// 1. all rows
+// 2. all columns
+// 3. all diagonals.
 void markBoard(vector<vector<bool>> &vis, int i, int j, int n)
 {
     for (int k = 0; k < n; k++)
@@ -57,15 +48,7 @@ void markBoard(vector<vector<bool>> &vis, int i, int j, int n)
         }
     }
 }
-
-pair<int, int> horseMovement(int i, int j, string dir)
-{
-    return {
-        i + horsePossibleDirs[dir].first,
-        j + horsePossibleDirs[dir].second,
-    };
-}
-bool backTracking(set<vector<string>> &res, vector<vector<char>> board, vector<vector<bool>> vis, int i, int j, int n, int Qnum)
+bool backTracking(vector<vector<string>> &res, vector<vector<char>> board, vector<vector<bool>> vis, int i, int j, int n, int Qnum)
 {
     //? Base Cases
 
@@ -85,11 +68,8 @@ bool backTracking(set<vector<string>> &res, vector<vector<char>> board, vector<v
                 rowString += c;
             // we should insert the current board and its flip cause both will be valid
             validBoard1.push_back(rowString);
-            reverse(rowString.begin(), rowString.end());
-            validBoard2.push_back(rowString);
         }
-        res.insert(validBoard1);
-        res.insert(validBoard2);
+        res.push_back(validBoard1);
         return true;
     }
 
@@ -98,46 +78,34 @@ bool backTracking(set<vector<string>> &res, vector<vector<char>> board, vector<v
     markBoard(vis, i, j, n);
     board[i][j] = 'Q';
     bool found = false;
-    for (auto movDir : horsePossibleDirs)
-    {
-        // if (found)
-        //     return true;
-        auto ij = horseMovement(i, j, movDir.first);
-        if (validIdx(ij.first, ij.second, n))
-            found = backTracking(res, board, vis, ij.first, ij.second, n, Qnum + 1);
-    }
+    for (int k = 0; k < n; k++)
+        found = backTracking(res, board, vis, k, j + 1, n, Qnum + 1);
+
     return false;
 }
 
 vector<vector<string>> solveNQueens(int n)
 {
-    // if (n == 2 || n == 3)
-    //     return {{}};
+
     if (n == 1)
         return {{"Q"}};
 
-    set<vector<string>> res;
+    vector<vector<string>> res2;
     vector<vector<char>> board(n, vector<char>(n, '.'));
     vector<vector<bool>> vis(n, vector<bool>(n));
-    // if (n & 1)
-    //     n = ceil((float)n / 2);
-    // else
-    //     n /= 2;
+
     for (int i = 0; i < n; i++)
     {
         board[i][0] = 'Q';
-        backTracking(res, board, vis, i, 0, vis.size(), 1);
+        backTracking(res2, board, vis, i, 0, vis.size(), 1);
         board[i][0] = '.';
     }
-    vector<vector<string>> res2;
-    for (auto item : res)
-        res2.push_back(item);
     return res2;
 }
 
 int main()
 {
-    auto res = solveNQueens(5);
+    auto res = solveNQueens(4);
     for (auto vec : res)
     {
         cout << " [ ";
