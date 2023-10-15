@@ -65,7 +65,7 @@ pair<int, int> horseMovement(int i, int j, string dir)
         j + horsePossibleDirs[dir].second,
     };
 }
-bool backTracking(vector<vector<string>> &res, vector<vector<char>> board, vector<vector<bool>> vis, int i, int j, int n, int Qnum)
+bool backTracking(set<vector<string>> &res, vector<vector<char>> board, vector<vector<bool>> vis, int i, int j, int n, int Qnum)
 {
     //? Base Cases
 
@@ -88,8 +88,8 @@ bool backTracking(vector<vector<string>> &res, vector<vector<char>> board, vecto
             reverse(rowString.begin(), rowString.end());
             validBoard2.push_back(rowString);
         }
-        res.push_back(validBoard1);
-        res.push_back(validBoard2);
+        res.insert(validBoard1);
+        res.insert(validBoard2);
         return true;
     }
 
@@ -100,8 +100,8 @@ bool backTracking(vector<vector<string>> &res, vector<vector<char>> board, vecto
     bool found = false;
     for (auto movDir : horsePossibleDirs)
     {
-        if (found)
-            return true;
+        // if (found)
+        //     return true;
         auto ij = horseMovement(i, j, movDir.first);
         if (validIdx(ij.first, ij.second, n))
             found = backTracking(res, board, vis, ij.first, ij.second, n, Qnum + 1);
@@ -116,25 +116,28 @@ vector<vector<string>> solveNQueens(int n)
     if (n == 1)
         return {{"Q"}};
 
-    vector<vector<string>> res;
+    set<vector<string>> res;
     vector<vector<char>> board(n, vector<char>(n, '.'));
     vector<vector<bool>> vis(n, vector<bool>(n));
-    if (n & 1)
-        n = ceil((float)n / 2);
-    else
-        n /= 2;
+    // if (n & 1)
+    //     n = ceil((float)n / 2);
+    // else
+    //     n /= 2;
     for (int i = 0; i < n; i++)
     {
         board[i][0] = 'Q';
         backTracking(res, board, vis, i, 0, vis.size(), 1);
         board[i][0] = '.';
     }
-    return res;
+    vector<vector<string>> res2;
+    for (auto item : res)
+        res2.push_back(item);
+    return res2;
 }
 
 int main()
 {
-    auto res = solveNQueens(1);
+    auto res = solveNQueens(5);
     for (auto vec : res)
     {
         cout << " [ ";
