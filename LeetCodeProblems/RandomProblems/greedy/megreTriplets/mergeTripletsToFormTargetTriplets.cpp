@@ -40,7 +40,7 @@ bool mergeTriplets(vector<vector<int>> &triplets, vector<int> &target)
     int counter = 0;
     vector<bool> vis(3);
     vector<vector<int>> possibleVecs;
-    for (auto triplet : triplets)
+    for (auto triplet : triplets) // O(n)
         if (validTriplet(triplet, target))
             possibleVecs.push_back({triplet[0], triplet[1], triplet[2]});
 
@@ -64,7 +64,7 @@ bool mergeTriplets(vector<vector<int>> &triplets, vector<int> &target)
     for (int i = 0; i < 3; i++)
         if (!vis[i])
         {
-            for (int j = 0; j < sz; j++)
+            for (int j = 0; j < sz; j++) // O(m) m = n - unuseful elements.
                 if (possibleVecs[j][i] == target[i])
                 {
                     //! 1. apply the operation
