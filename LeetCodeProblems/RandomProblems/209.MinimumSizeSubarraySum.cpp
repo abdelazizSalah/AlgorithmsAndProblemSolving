@@ -12,46 +12,24 @@ void movePointers(int &bgnPtr, int &endPtr, int sz)
         endPtr++;
     bgnPtr++;
 }
-int minSubArrayLen(int target, vector<int> &nums)
+class Solution
 {
-
-    DPSolver;
-    int bgnPtr = 0;
-    int endPtr = 1;
-    int sz = nums.size();
-    int mnSize = INT_MAX;
-    int cumSum = nums[0];
-    bool stopAdding = false;
-    while (endPtr <= sz - 1 && bgnPtr != endPtr)
+public:
+    int minSubArrayLen(int target, vector<int> &nums)
     {
-        if (cumSum + (nums[endPtr] * !stopAdding) >= target)
+        int n = nums.size();
+        int wsum = 0, l = 0, r;
+        int ans = INT_MAX;
+        for (r = 0; r < n; r++)
         {
-            if (!stopAdding)
-                cumSum += nums[endPtr];
-            if (endPtr < sz - 1)
-                endPtr++;
-            else
-                stopAdding = true;
-            mnSize = min(mnSize, endPtr - bgnPtr);
-            cumSum -= nums[bgnPtr];
-            bgnPtr++;
+            wsum += nums[r];
+            while (wsum >= target)
+            {
+                wsum -= nums[l];
+                ans = min(ans, r - l + 1);
+                l++;
+            }
         }
-        // else if (cumSum + nums[endPtr] > target)
-        // {
-        //     cumSum -= nums[bgnPtr];
-        //     bgnPtr++;
-        // }
-        else
-            // less
-            cumSum += nums[endPtr++];
+        return ans == INT_MAX ? 0 : ans;
     }
-    return mnSize + 1;
-}
-
-int main()
-{
-    int tr = 11;
-    vector<int> v = {1, 2, 3, 4, 5};
-    cout << minSubArrayLen(tr, v);
-    return 0;
-}
+};
