@@ -8,7 +8,6 @@ using namespace std;
 /// Time limit exceeded. s
 struct CustomCompare
 {
-
     bool operator()(const std::pair<int, string> &p1, const std::pair<int, string> &p2) const
     {
         if (p1.first < p2.first)
