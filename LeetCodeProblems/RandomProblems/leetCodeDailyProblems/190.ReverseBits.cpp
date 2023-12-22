@@ -5,26 +5,21 @@
 static const auto DPSolver = []()
 { std::ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr); return 'c'; }();
 using namespace std;
-int maxScore(string s)
+uint32_t reverseBits(uint32_t n)
 {
-    DPSolver;
-    int sz = s.length();
-    int leftScore = 0;
-    int rightScore = count(s.begin(), s.end(), '1');
-    int mx = 0;
-
-    for (int i = 0; i < sz - 1; ++i)
+    unsigned int ans = 0;
+    for (int i = 0; i <= 31; i++)
     {
-        if (s[i] == '0')
-            leftScore++;
-        else
-            rightScore--;
-        mx = max(leftScore + rightScore, mx);
+        ans = (ans << 1) | ((n >> i) & 1);
     }
-    return mx;
+    return ans;
 }
 
 int main()
 {
-    cout << maxScore("0100");
+    cout << (7 & 1) << "----> should be 1"
+         << endl;
+    uint32_t n = 00000010100101000001111010011101;
+    cout << reverseBits(4);
+    return 0;
 }
