@@ -23,5 +23,23 @@ bool uniqueOccurrences(vector<int> &arr)
         if (pq.size() && tp == pq.top())
             return false; 
     }
+   const int * p = &arr[0]; 
     return true; 
+}
+
+
+void increment(const int&i ){
+    ++ const_cast<int&>(i); 
+}
+
+struct S {
+    ~S() {cout << 'x';} ;
+}
+
+int main () {
+    string s1 = "hello";
+    string s2 = move(s1);
+    cout << s1.size(); 
+    cout << s2.size(); 
+    return 0;  
 }
