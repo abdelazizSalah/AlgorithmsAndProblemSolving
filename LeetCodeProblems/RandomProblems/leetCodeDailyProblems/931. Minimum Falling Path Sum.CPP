@@ -65,3 +65,47 @@ int main () {
     cout << minFallingPathSum(mat); 
     return 0; 
 }
+
+
+// tabulation 
+class Solution {
+
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        
+        int n = matrix.size();
+
+        vector<vector<int>> dp(n, vector<int> (n, -1));
+        for(int i = 0; i<n; i++)
+        {
+            dp[n-1][i] = matrix[n-1][i];
+        }
+
+        for(int rowIdx = n-2; rowIdx >= 0; rowIdx--)
+        {
+            for(int colIdx = 0; colIdx < n; colIdx++)
+            {
+                // Down
+                int down = matrix[rowIdx][colIdx] + dp[rowIdx + 1][colIdx];
+
+                // Left Diagonal
+                int leftDiagonal = matrix[rowIdx][colIdx] + (colIdx - 1 < 0 ? 1e9 : dp[rowIdx + 1][colIdx - 1]);
+
+                // Right Diagonal
+                int rightDiagonal = matrix[rowIdx][colIdx] + (colIdx + 1 >= n ? 1e9 : dp[rowIdx + 1][colIdx + 1]);
+
+                dp[rowIdx][colIdx] = min(down, min(leftDiagonal, rightDiagonal));
+            }
+        }
+        
+        int ans = INT_MAX;
+        for(int i = 0; i<n; i++)
+        {
+            ans = min(ans, dp[0][i]);
+        }
+
+        return ans;
+        
+
+    }
+};
