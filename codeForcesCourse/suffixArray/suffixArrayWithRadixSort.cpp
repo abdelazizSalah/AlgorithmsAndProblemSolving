@@ -11,6 +11,7 @@
 #define INT_MIN (-2147483647 - 1)
 using namespace std;
 
+// my radix sort
 int get_max_element(vector<pair<int, int>> &vec)
 {
     int mx = INT_MIN;
@@ -30,7 +31,7 @@ void radixSort(vector<pair<int, int>> &vec)
     vector<pair<int, int>> halvSortedVec;
     vector<pair<int, int>> sortedVec;
     // 2. create a buckets for each element
-    vector<vector<pair<int, int>>> buckets(mxElement+1);
+    vector<vector<pair<int, int>>> buckets(mxElement + 1);
 
     // 3. insert each element in vec in its corresponding bucket using the second element as a key
     for (int i = 0; i < sz; i++)
@@ -53,6 +54,47 @@ void radixSort(vector<pair<int, int>> &vec)
             sortedVec.push_back(item);
 
     vec = sortedVec;
+}
+
+//! I need to understand this logic below...
+// the lecture radix sort
+void radixSort(vector<pair<pair<int, int>, int>> &state)
+{
+    int sz = state.size();
+    {
+        vector<int> count(sz);
+        for (auto item : state)
+            count[item.first.second]++;
+        vector<pair<pair<int, int>, int>> newState(sz);
+        vector<int> positions(sz);
+        positions[0] = 0;
+        for (int i = 1; i < sz; i++)
+            positions[i] = positions[i - 1] + count[i - 1];
+        for (auto item : state)
+        {
+            int i = item.first.second;
+            newState[positions[i]] = item;
+            positions[i]++;
+        }
+        state = newState;
+    }
+    {
+        vector<int> count(sz);
+        for (auto item : state)
+            count[item.first.first]++;
+        vector<pair<pair<int, int>, int>> newState(sz);
+        vector<int> positions(sz);
+        positions[0] = 0;
+        for (int i = 1; i < sz; i++)
+            positions[i] = positions[i - 1] + count[i - 1];
+        for (auto item : state)
+        {
+            int i = item.first.first;
+            newState[positions[i]] = item;
+            positions[i]++;
+        }
+        state = newState;
+    }
 }
 
 vector<int> suffixArray(string s)
@@ -100,8 +142,8 @@ vector<int> suffixArray(string s)
             state[i] = {{classes[i], classes[(i + (1 << k)) % sz]}, i};
 
         // 5.2 sort the state
-        sort(state.begin(), state.end());
-
+        // sort(state.begin(), state.end());
+        radixSort(state);
         // 5.3 store the new positions.
         for (int i = 0; i < sz; i++)
             positions[i] = state[i].second;
@@ -122,16 +164,11 @@ vector<int> suffixArray(string s)
 
 int main()
 {
-    // string s;
-    // cin >> s;
-    // auto positions = suffixArray(s);
-    // for (int p : positions)
-    //     cout << p << ' ';
-
-    vector<pair<int, int>> v = {{3, 2}, {2, 1}, {1, 3}, {0, 1}, {2, 0}, {3, 0}, {1, 2}, {3, 1}};
-    radixSort(v);
-    for (auto item : v)
-        cout << item.first << ' ' << item.second << endl;
+    string s;
+    cin >> s;
+    auto positions = suffixArray(s);
+    for (int p : positions)
+        cout << p << ' ';
 
     return 0;
 }
