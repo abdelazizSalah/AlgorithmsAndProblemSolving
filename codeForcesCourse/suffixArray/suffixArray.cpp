@@ -1,16 +1,17 @@
 #include <bits/stdc++.h>
-// #pragma GCC optimize("O3")
-// #pragma GCC optimize("Ofast", "inline", "ffast-math", "unroll-loops", "no-stack-protector")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,tune=native", "f16c")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("Ofast", "inline", "ffast-math", "unroll-loops", "no-stack-protector")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,tune=native", "f16c")
 static const auto DPSolver = []()
 { std::ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr); return 'c'; }();
 using namespace std;
 using ll = long long;
 
 
-void buildSuffixArray(string s)
+int main()
 {
     DPSolver; 
+    string s; cin >> s; 
     // 1. add $ to the end of the string
     s += '$';
 
@@ -36,7 +37,7 @@ void buildSuffixArray(string s)
     while ((1 << k) < sz) { // till 2^k
         vector<pair<pair<int,int>, int>> newState(sz) ;
         for (int i = 0; i < sz; i ++)
-            newState[i] = {{classes[i], classes[(i + (1<<k))%sz]}, i}; // left part and right part and the class
+            newState[i] = {{classes[i], classes[(i + (1<<k))%sz]}, i}; //! left part and right part and the position -> ana el satr da el msh fahmo....
         sort (newState.begin(), newState.end()); 
         for (int i = 0; i < sz; i++) positions[i] = newState[i].second; 
         classes[positions[0]] = 0; 
@@ -51,11 +52,7 @@ void buildSuffixArray(string s)
 
     for (int i = 0 ; i < sz ; i ++)
         cout << positions[i] << ' '; 
+    
+    return 0; 
 
-}
-
-int main()
-{
-    buildSuffixArray("ababba"); 
-    return 0;
 }
