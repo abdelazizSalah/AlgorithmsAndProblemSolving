@@ -18,7 +18,8 @@ void countingSort(int minRange, int maxRange, vector<int> &unsortedElements)
     // determine the indicies
     vector<int> indicies(totalSize);
     for (int i = 1; i < totalSize; i++)
-        indicies[i] = indicies[i - 1] + count[i];
+        indicies[i] = indicies[i - 1] + count[i]; // hena i, 34an ngeb last index w nbd2 nmshy back, mmkn bkhleha i-1 w b3dha n3ml increment.
+    // indicies[i] = indicies[i - 1] + count[i - 1]; // lw khltha keda, yeb2a lazm tmshy 3l t3del el t7t, enk, b3d ma tgeb el index, t3ml increment lel indicies, w tst5dm el index msh --index.
 
     // now lets sort the vector
     int sz = unsortedElements.size();
@@ -27,6 +28,9 @@ void countingSort(int minRange, int maxRange, vector<int> &unsortedElements)
     {
         int index = indicies[unsortedElements[i]]--;
         sortedVec[--index] = unsortedElements[i];
+        //! using count[i-1] instead of count[i] :D
+        // int index = indicies[unsortedElements[i]]++;
+        // sortedVec[index] = unsortedElements[i];
     }
 
     unsortedElements = sortedVec;

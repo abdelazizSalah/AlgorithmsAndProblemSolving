@@ -17,25 +17,22 @@ void countingSort(vector<int> &positions, vector<int> &classes)
     vector<int> count(n);
     for (int c : classes)
         count[c]++;
-    vector<int> newPositions(n);
-    vector<int> pos(n);
-    pos[0] = 0;
 
     /*
         hena bn3d feh kam element fe el position i-1, w ana bd2t el position i-1 mn fen, 34an a2dr a2ol el position bta3 i hybd2 mn fen
-        ie: 
-        1,1,1,1,2,2,3,3,3
-        tb3n b3tbar enhom msh sorted fl awl.
-        ka ana 3arf en position bta3 1, hyb2a 0 34an da awl wahed.
-        b3den position bta3 2 el mfrod yeb2a fen? bzbt, 3nd 0 + 4 => 4 elly hwa blnsbalna 3 lw zero based. w hakaza baa.  
+
+        look at the counting sort file.
     */
+    vector<int> indicies(n);
     for (int i = 1; i < n; i++)
-        pos[i] = pos[i - 1] + count[i - 1]; // ana keda fhmtk :D 
+        indicies[i] = indicies[i - 1] + count[i - 1]; // ana keda fhmtk :D
+
+    vector<int> newPositions(n);
     for (int position : positions)
     {
         int clas = classes[position];
-        newPositions[pos[clas]] = position;
-        pos[clas]++;
+        newPositions[indicies[clas]] = position;
+        indicies[clas]++;
     }
     positions = newPositions;
 }
