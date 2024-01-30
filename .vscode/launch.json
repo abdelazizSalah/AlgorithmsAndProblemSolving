@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/GitHub/AlgorithmsAndProblemSolving/Math",
-      "program": "c:/GitHub/AlgorithmsAndProblemSolving/Math/build/Debug/outDebug",
+      "cwd": "c:/GitHub/AlgorithmsAndProblemSolving/codeForcesCourse/suffixArray",
+      "program": "c:/GitHub/AlgorithmsAndProblemSolving/codeForcesCourse/suffixArray/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

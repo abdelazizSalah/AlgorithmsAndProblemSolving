@@ -23,11 +23,14 @@ int get_max_element(vector<pair<int, int>> &vec)
     return mx;
 }
 
+// this need to be customized on the vector in this shape: vector<pair<pair<int, int>, int>> &state
 void radixSort(vector<pair<int, int>> &vec)
 {
     // 1. get the max element
-    int mxElement = get_max_element(vec);
+    // int mxElement = get_max_element(vec); // no need for this function because the max is the size of the given vec. 
+
     int sz = vec.size();
+    int mxElement = sz; 
     vector<pair<int, int>> halvSortedVec;
     vector<pair<int, int>> sortedVec;
     // 2. create a buckets for each element
@@ -62,10 +65,15 @@ void radixSort(vector<pair<pair<int, int>, int>> &state)
 {
     int sz = state.size();
     {
-        vector<int> count(sz);
+        // create a vector of count of the same size of the given vector. 
+        vector<int> count(sz); 
+        // fill it using the second item value
         for (auto item : state)
             count[item.first.second]++;
+        
+        // create new vector to store the new ordered items in. 
         vector<pair<pair<int, int>, int>> newState(sz);
+        // this vector to carry the positions. 
         vector<int> positions(sz);
         positions[0] = 0;
         for (int i = 1; i < sz; i++)
