@@ -3,14 +3,13 @@
     @date: 26/1/2024
     @brief: This file contains the implementation of the suffix array which takes complexity O(n log^2(n)).
 */
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <iostream>
 #define INT_MIN (-2147483647 - 1)
 using namespace std;
-
 
 // //! I need to understand this logic below...
 // // the lecture radix sort
@@ -58,8 +57,6 @@ using namespace std;
 //     }
 // }
 
-
-
 // my radix sort
 int get_max_element(vector<pair<int, int>> &vec)
 {
@@ -94,11 +91,13 @@ void radixSort(vector<pair<pair<int, int>, int>> &vec)
     // 5. set buckets to empty and repeat
     for (int i = 0; i <= mxElement; i++)
         buckets[i].clear();
-        
+    //! No need for the upper 3 steps, because the right part is already sorted.
+
+    // 6. insert each element in the vec in its corresponding bucket using the first element as a key.
     for (int i = 0; i < sz; i++)
         buckets[halvSortedVec[i].first.first].push_back(halvSortedVec[i]);
 
-    // 6. insert the elements in their order in the sorted
+    // 7. insert the elements in their order in the sortedVec
     for (int i = 0; i <= mxElement; i++)
         for (auto item : buckets[i])
             sortedVec.push_back(item);
@@ -151,8 +150,9 @@ vector<int> suffixArray(string s)
             state[i] = {{classes[i], classes[(i + (1 << k)) % sz]}, i};
 
         // 5.2 sort the state
-        // sort(state.begin(), state.end());
-        radixSort(state);
+        // sort(state.begin(), state.end()); // nlg^2n
+        radixSort(state); // 2nlgn
+
         // 5.3 store the new positions.
         for (int i = 0; i < sz; i++)
             positions[i] = state[i].second;
