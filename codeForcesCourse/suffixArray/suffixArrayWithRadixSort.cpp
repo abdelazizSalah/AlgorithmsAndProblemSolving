@@ -3,13 +3,62 @@
     @date: 26/1/2024
     @brief: This file contains the implementation of the suffix array which takes complexity O(n log^2(n)).
 */
-// #include <bits/stdc++.h>
+#include <bits/stdc++.h>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <iostream>
 #define INT_MIN (-2147483647 - 1)
 using namespace std;
+
+
+// //! I need to understand this logic below...
+// // the lecture radix sort
+// void radixSort(vector<pair<pair<int, int>, int>> &state)
+// {
+//     int sz = state.size();
+//     {
+//         // create a vector of count of the same size of the given vector.
+//         vector<int> count(sz);
+//         // fill it using the second item value
+//         for (auto item : state)
+//             count[item.first.second]++;
+
+//         // create new vector to store the new ordered items in.
+//         vector<pair<pair<int, int>, int>> newState(sz);
+//         // this vector to carry the positions.
+//         vector<int> positions(sz);
+//         positions[0] = 0;
+//         for (int i = 1; i < sz; i++)
+//             positions[i] = positions[i - 1] + count[i - 1];
+//         for (auto item : state)
+//         {
+//             int i = item.first.second;
+//             newState[positions[i]] = item;
+//             positions[i]++;
+//         }
+//         state = newState;
+//     }
+//     {
+//         vector<int> count(sz);
+//         for (auto item : state)
+//             count[item.first.first]++;
+//         vector<pair<pair<int, int>, int>> newState(sz);
+//         vector<int> positions(sz);
+//         positions[0] = 0;
+//         for (int i = 1; i < sz; i++)
+//             positions[i] = positions[i - 1] + count[i - 1];
+//         for (auto item : state)
+//         {
+//             int i = item.first.first;
+//             newState[positions[i]] = item;
+//             positions[i]++;
+//         }
+//         state = newState;
+//     }
+// }
+
+
 
 // my radix sort
 int get_max_element(vector<pair<int, int>> &vec)
@@ -24,21 +73,18 @@ int get_max_element(vector<pair<int, int>> &vec)
 }
 
 // this need to be customized on the vector in this shape: vector<pair<pair<int, int>, int>> &state
-void radixSort(vector<pair<int, int>> &vec)
+void radixSort(vector<pair<pair<int, int>, int>> &vec)
 {
-    // 1. get the max element
-    // int mxElement = get_max_element(vec); // no need for this function because the max is the size of the given vec. 
-
     int sz = vec.size();
-    int mxElement = sz; 
-    vector<pair<int, int>> halvSortedVec;
-    vector<pair<int, int>> sortedVec;
+    int mxElement = sz;
+    vector<pair<pair<int, int>, int>> halvSortedVec;
+    vector<pair<pair<int, int>, int>> sortedVec;
     // 2. create a buckets for each element
-    vector<vector<pair<int, int>>> buckets(mxElement + 1);
+    vector<vector<pair<pair<int, int>, int>>> buckets(mxElement + 1);
 
     // 3. insert each element in vec in its corresponding bucket using the second element as a key
     for (int i = 0; i < sz; i++)
-        buckets[vec[i].second].push_back(vec[i]);
+        buckets[vec[i].first.second].push_back(vec[i]);
 
     // 4. insert the elements in their order in the halvSortedVec
     for (int i = 0; i <= mxElement; i++)
@@ -48,8 +94,9 @@ void radixSort(vector<pair<int, int>> &vec)
     // 5. set buckets to empty and repeat
     for (int i = 0; i <= mxElement; i++)
         buckets[i].clear();
+        
     for (int i = 0; i < sz; i++)
-        buckets[halvSortedVec[i].first].push_back(halvSortedVec[i]);
+        buckets[halvSortedVec[i].first.first].push_back(halvSortedVec[i]);
 
     // 6. insert the elements in their order in the sorted
     for (int i = 0; i <= mxElement; i++)
@@ -57,52 +104,6 @@ void radixSort(vector<pair<int, int>> &vec)
             sortedVec.push_back(item);
 
     vec = sortedVec;
-}
-
-//! I need to understand this logic below...
-// the lecture radix sort
-void radixSort(vector<pair<pair<int, int>, int>> &state)
-{
-    int sz = state.size();
-    {
-        // create a vector of count of the same size of the given vector. 
-        vector<int> count(sz); 
-        // fill it using the second item value
-        for (auto item : state)
-            count[item.first.second]++;
-        
-        // create new vector to store the new ordered items in. 
-        vector<pair<pair<int, int>, int>> newState(sz);
-        // this vector to carry the positions. 
-        vector<int> positions(sz);
-        positions[0] = 0;
-        for (int i = 1; i < sz; i++)
-            positions[i] = positions[i - 1] + count[i - 1];
-        for (auto item : state)
-        {
-            int i = item.first.second;
-            newState[positions[i]] = item;
-            positions[i]++;
-        }
-        state = newState;
-    }
-    {
-        vector<int> count(sz);
-        for (auto item : state)
-            count[item.first.first]++;
-        vector<pair<pair<int, int>, int>> newState(sz);
-        vector<int> positions(sz);
-        positions[0] = 0;
-        for (int i = 1; i < sz; i++)
-            positions[i] = positions[i - 1] + count[i - 1];
-        for (auto item : state)
-        {
-            int i = item.first.first;
-            newState[positions[i]] = item;
-            positions[i]++;
-        }
-        state = newState;
-    }
 }
 
 vector<int> suffixArray(string s)
