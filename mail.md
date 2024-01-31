@@ -23,3 +23,10 @@ Thank you for your time and consideration.
 Best Regards,
 
 Abdelaziz Salah.
+
+
+
+We found something called ECTS grading system, and most of the universities ask for at least 6 points, but since we are not credit hours, we have only our grades, we don't know how exactly to convert our grades into this system, and we have searched online but we have found nothing. 
+
+
+And if you have some free time, could we have a zoom meeting with you, so we could show you what we have done till now, and ask for more inquiries
