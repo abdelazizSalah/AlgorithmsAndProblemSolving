@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/GitHub/AlgorithmsAndProblemSolving/codeForcesCourse/suffixArray/problemsOnSuffixArray",
-      "program": "c:/GitHub/AlgorithmsAndProblemSolving/codeForcesCourse/suffixArray/problemsOnSuffixArray/build/Debug/outDebug",
+      "cwd": "c:/GitHub/AlgorithmsAndProblemSolving/codeForcesCourse/suffixArray",
+      "program": "c:/GitHub/AlgorithmsAndProblemSolving/codeForcesCourse/suffixArray/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
