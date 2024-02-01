@@ -1,10 +1,10 @@
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <iostream>
-#define INT_MIN (-2147483647 - 1);
+#include <bits/stdc++.h>
+// #pragma GCC optimize("O3")
+// #pragma GCC optimize("Ofast", "inline", "ffast-math", "unroll-loops", "no-stack-protector")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,tune=native", "f16c")
+static const auto DPSolver = []()
+{ std::ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr); return 'c'; }();
 using namespace std;
-
 void countingSort(vector<int> &positions, vector<int> &classes)
 {
     int n = positions.size();
@@ -99,69 +99,104 @@ vector<int> suffixArray(string &s)
     return positions;
 }
 
-int compareStrings(string s, string q, int startingIdxForS, int numberOfChars)
+int compareStrings(string &s, string &q, int startingIdxForS, int numberOfChars)
 {
-    int j = 0;
-    for (int i = startingIdxForS; i < startingIdxForS + numberOfChars; i++) // O(|p|)
+    int targetIdx = 0;
+    int sLen = s.length();
+    for (int i = startingIdxForS; i < startingIdxForS + numberOfChars; i++)
     {
-        if (s[i % s.length()] > q[j])
-            return -1;
-        else if (s[i  % s.length()] < q[j])
-            return 1;
-        j++;
+        if (s[i] == q[targetIdx])
+            targetIdx++;
+        else
+        {
+            return s[i] - q[targetIdx];
+        }
     }
+
+    // for (int i = 0; i < numberOfChars; i++){
+    //     if (s[startingIdxForS] == q[i])
+    // }
     return 0;
 }
 
-bool subStringExist(const vector<int> &positions, string s, string q)
+/*
+    After getting the index of the correct element.
+    we need to check around it, and since they are sorted, so we can get all the
+    elements which start with the same prefix.
+*/
+int linearSearch(const vector<int> &positions, int startingIdx, string &q, string &s)
+{
+    int counter = 1;
+    int qLen = q.length();
+    int sLen = s.length();
+    // lookLeft
+    for (int i = startingIdx - 1; i >= 0; i--)
+        // if (compareStrings(s, q, positions[i], min(len, (int)s.length() - positions[i])) == 0)
+        if(q.compare(s.substr(positions[i], min(qLen, sLen - positions[i]))) == 0)
+            counter++;
+        else
+            break;
+
+    // look right
+    int sz = positions.size();
+    for (int i = startingIdx + 1; i < sz; i++)
+        if(q.compare(s.substr(positions[i], min(qLen, sLen - positions[i]))) == 0)
+            counter++;
+        else
+            break;
+
+    return counter;
+}
+
+int subStringExist(const vector<int> &positions, string &s, string &q)
 {
     // we should look at the length of q
     int len = q.length();
 
     // apply binary search
     int bgn = 0;
-    int end = s.length();
+    int end = s.length() - 1;
     int md = (bgn + end) / 2;
-    bool changed = true;
-    int counter = 0; 
-    while (bgn < end && changed) // O(lg n)
+    while (bgn <= end) // lgn * |P|
     {
-        int compare = compareStrings(s, q, positions[md], len);
+        /*
+            This returs 0 if both are equal
+            -ve if q is smaller
+            +ve if q is larger.
+            we should send the strings by reference to avoid useless copying.
+        */
+        // int compare = q.compare(s.substr(positions[md], min(len, (int)s.length() - positions[md])));
+        int compare = compareStrings(s, q, positions[md], min(len, (int)s.length() - positions[md]));
         if (compare == 0)
-            counter ++;  // found
-        else if (compare == 1)
+            return linearSearch(positions, md, q, s);
+        else if (compare < 0)
             // larger
             bgn = md + 1;
         else
-            end = md;
+            end = md - 1;
 
         md = (bgn + end) / 2;
     }
-    if (md < s.length() && md > 0)
-        if (compareStrings(s, q, positions[md], len) == 0)
-            return true;
     return false;
 }
 
 int main()
 {
+    DPSolver;
     string s;
     cin >> s;
     // build the suffix array
-    vector<int> positions = suffixArray(s); // O(nlgn) -> 5.5 * 10^(6) -> fit
+    vector<int> positions = suffixArray(s);
 
     // reading the queries.
     int q;
     cin >> q;
-    while (q--) // O(q |P| log N) -> (3 * 10^(5) * 3 * 10^(5) log (3 * 10^(5)))
+    while (q--) // O(q -> 3 * 10^(5))
     {
         string query;
         cin >> query;
         // call the function
-        if (subStringExist(positions, s, query)) // O(|P| log N)
-            cout << "Yes\n";
-        else
-            cout << "No\n";
+        cout << subStringExist(positions, s, query) << '\n';
     }
 
     return 0;
