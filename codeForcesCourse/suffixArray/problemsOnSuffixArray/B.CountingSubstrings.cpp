@@ -132,7 +132,7 @@ int linearSearch(const vector<int> &positions, int startingIdx, string &q, strin
     // lookLeft
     for (int i = startingIdx - 1; i >= 0; i--)
         // if (compareStrings(s, q, positions[i], min(len, (int)s.length() - positions[i])) == 0)
-        if(q.compare(s.substr(positions[i], min(qLen, sLen - positions[i]))) == 0)
+        if (q.compare(s.substr(positions[i], min(qLen, sLen - positions[i]))) == 0)
             counter++;
         else
             break;
@@ -140,7 +140,7 @@ int linearSearch(const vector<int> &positions, int startingIdx, string &q, strin
     // look right
     int sz = positions.size();
     for (int i = startingIdx + 1; i < sz; i++)
-        if(q.compare(s.substr(positions[i], min(qLen, sLen - positions[i]))) == 0)
+        if (q.compare(s.substr(positions[i], min(qLen, sLen - positions[i]))) == 0)
             counter++;
         else
             break;
@@ -180,24 +180,85 @@ int subStringExist(const vector<int> &positions, string &s, string &q)
     return false;
 }
 
+int lookLeft(const vector<int> &sortedDigits, int startIdx, int endIdx, int trgt)
+{
+    // base case
+    if (startIdx == endIdx)
+    {
+        return startIdx;
+    }
+    else if (startIdx > endIdx) // the bug is here. 
+        return endIdx;
+
+    if (sortedDigits[startIdx] == trgt)
+        // look left again
+        return lookLeft(sortedDigits, startIdx, ((startIdx + endIdx) / 2) - 1, trgt);
+    else
+        return lookLeft(sortedDigits, ((startIdx + endIdx) / 2) + 1, endIdx, trgt);
+}
+int lookRight(const vector<int> &sortedDigits, int startIdx, int endIdx, int trgt)
+{
+    // base case
+    if (startIdx == endIdx)
+        return startIdx;
+    else if (startIdx > endIdx) // the bug is here. 
+        return endIdx;
+
+    if (sortedDigits[startIdx] != trgt)
+        // look left again
+        return lookRight(sortedDigits, startIdx, ((startIdx + endIdx) / 2) - 1, trgt);
+    else
+        return lookRight(sortedDigits, ((startIdx + endIdx) / 2) + 1, endIdx, trgt);
+}
+
+int digitsBS(const vector<int> &sortedDigits, int trgt)
+{
+    int sz = sortedDigits.size();
+    int bgn = 0, end = sz - 1, md = (end + bgn) / 2;
+    while (bgn <= end)
+    {
+        if (sortedDigits[md] == trgt)
+        {
+            int right = lookRight(sortedDigits, md + 1, sz - 1, trgt);
+            int left = lookLeft(sortedDigits, 0, md - 1, trgt);
+            return (right - left);
+        }
+        else if (sortedDigits[md] > trgt)
+        {
+            end = md - 1;
+        }
+        else
+        {
+            bgn = md + 1;
+        }
+        md = (end + bgn) / 2;
+    }
+
+    // not found
+    return 0;
+}
+
 int main()
 {
     DPSolver;
-    string s;
-    cin >> s;
-    // build the suffix array
-    vector<int> positions = suffixArray(s);
+    vector<int> digits = {0, 0, 1, 1, 1, 1, 2, 2, 2};
+    cout << digitsBS(digits, 1);
 
-    // reading the queries.
-    int q;
-    cin >> q;
-    while (q--) // O(q -> 3 * 10^(5))
-    {
-        string query;
-        cin >> query;
-        // call the function
-        cout << subStringExist(positions, s, query) << '\n';
-    }
+    // string s;
+    // cin >> s;
+    // // build the suffix array
+    // vector<int> positions = suffixArray(s);
+
+    // // reading the queries.
+    // int q;
+    // cin >> q;
+    // while (q--) // O(q -> 3 * 10^(5))
+    // {
+    //     string query;
+    //     cin >> query;
+    //     // call the function
+    //     cout << subStringExist(positions, s, query) << '\n';
+    // }
 
     return 0;
 }
