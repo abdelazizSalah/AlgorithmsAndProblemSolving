@@ -81,19 +81,25 @@ vector<int> suffixArray(string s)
             positions[i] = (positions[i] + sz - (1 << k)) % sz; // +sz to avoid negatives, %sz to be cyclic.
 
         // 5.2 sort the state
-        countingSort(positions, classes); // 2nlgn
+        countingSort(positions, classes); // nlgn
 
         // 5.3 update classes
         vector<int> newClasses(sz);
         newClasses[positions[0]] = 0;
         for (int i = 1; i < sz; i++)
         {
-            pair<int, int> prev = {classes[positions[i - 1]], classes[(positions[i - 1] + (1 << k)) % sz]};
-            pair<int, int> current = {classes[positions[i]], classes[(positions[i] + (1 << k)) % sz]};
+            pair<int, int> prev = 
+            {classes[positions[i - 1]],
+             classes[(positions[i - 1] + (1 << k)) % sz]};
+            pair<int, int> current =
+             {classes[positions[i]],
+              classes[(positions[i] + (1 << k)) % sz]};
             if (prev == current)
-                newClasses[positions[i]] = newClasses[positions[i - 1]];
+                newClasses[positions[i]] = 
+                newClasses[positions[i - 1]];
             else
-                newClasses[positions[i]] = newClasses[positions[i - 1]] + 1;
+                newClasses[positions[i]] = 
+                newClasses[positions[i - 1]] + 1;
         }
         // 5.4 assign new classes to the global classes.
         classes = newClasses;
