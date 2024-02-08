@@ -1,3 +1,7 @@
+/*
+    I have learned how to get the first occurance, and last occurance of certain digit using binary search.
+    and solved a problem of suffix array.
+*/
 #include <bits/stdc++.h>
 // #pragma GCC optimize("O3")
 // #pragma GCC optimize("Ofast", "inline", "ffast-math", "unroll-loops", "no-stack-protector")
