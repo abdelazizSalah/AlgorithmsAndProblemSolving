@@ -32,6 +32,7 @@ int numSquares(int n)
     int mn = INT_MAX;
     for (auto item : perfectSquares)
         mn = min (mn, numSquares(n-item));
+    memo[n] = mn + 1;
     return mn + 1; 
 
 }
