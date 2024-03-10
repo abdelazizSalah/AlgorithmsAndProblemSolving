@@ -6,6 +6,21 @@ static const auto DPSolver = []()
 { std::ios_base::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr); return 'c'; }();
 using ll = long long;
 using namespace std;
+#pragma GCC optimize("O3", "unroll-loops")
+class Solution {
+public:
+/// since It is known that x&(x-1) = removing the rightmost signifcant bit in x
+    int rangeBitwiseAnd(int left, int right) {
+        if (left==0) return 0;
+        if (__builtin_clz(left)!=__builtin_clz(right))
+            return 0;//left & right don't have same bit length
+        while(right>left){
+            right&=(right-1);
+        }
+        return right;
+    }
+};
+
 int rangeBitwiseAnd(int left, int right)
 {
     DPSolver;
