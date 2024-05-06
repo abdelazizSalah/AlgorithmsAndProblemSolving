@@ -8,7 +8,7 @@ using ll = long long;
 using namespace std;
 // #pragma GCC optimize("O3", "unroll-loops")
 
-void DSR (const vector<vector<int>> &G , const int & dest, vector<bool>& vis, map<int,string>& memo, string path, int src) {
+void DSR (const vector<vector<int>> &G , const int & dest, vector<bool>& vis, map<int,vector<int>>& memo, vector<int> path, int src) {
     /// base cases;  
     if (src == dest)
         return ;
@@ -18,23 +18,39 @@ void DSR (const vector<vector<int>> &G , const int & dest, vector<bool>& vis, ma
         /// minimizing on 2 factors. 
         /// 1. shorter length
         /// 2. smaller in lexographical order 
-        int prevPathLen = memo[src].length();  
-        int currentPathLen = path.length();  
+        int prevPathLen = memo[src].size();  
+        int currentPathLen = path.size();  
         if (prevPathLen == currentPathLen) { 
-            memo[src] = min(path, memo[src]); 
+            vector<int> currenVector = memo[src]; 
+            for (int i = 0 ; i < prevPathLen; i++) { 
+                if (path[i] < currenVector[i]){
+                    memo[src] = path; 
+                    return; 
+                } else if (currenVector[i] < path[i]){ 
+                    return;
+                }
+                /// in case they are equal, just continue.
+            }
+            // memo[src] = min(path, memo[src]); /// heya de el 3amla el mushkela, lw galak 7agat 11 w 15 w bta3, httl3 ghlt azun
+
         } else if (prevPathLen > currentPathLen) { 
-            memo[src] = path + to_string(src); 
+            path.push_back(src); 
+            memo[src] = path ;
         }
+        /// the previous path was shorter, so keep it.
         return ;
     }
 
     /// mark the node as visited 
     vis[src] = true; 
 
+    /// add the current node to the path
+    path.push_back(src);
+    memo[src] = path; 
+
     /// iterate over all the nieghbours; 
     for (int nei : G[src]) { 
-        memo[src] = (path + to_string(src)); 
-        DSR(G, dest, vis, memo, (path + to_string(src)), nei); 
+        DSR(G, dest, vis, memo, path, nei); 
     }
 }
 vector<vector<int>> readingGraph() { 
@@ -60,14 +76,14 @@ void printGraph(const vector<vector<int>>&G) {
     } 
 }
 
-void printResult(map<int,string> &memo, const int& numNodes){ 
+void printResult(map<int,vector<int>> &memo, const int& numNodes){ 
     /*
         Iterate over the map, if the element does not exist in the map, print -1, else print the path. 
     */
    for( int i = 1; i < numNodes; i ++) { 
-     if (memo[i].length())
-        for (char c : memo[i])
-            cout << c << ' '; 
+     if (memo[i].size())
+        for (int num : memo[i])
+            cout << num << ' ' ;  
     else 
         cout << "-1" ; 
         cout << '\n';  
@@ -89,11 +105,11 @@ int main () {
     vector<bool> vis (G.size()); 
 
     /// 4. create an empty string which contains the path 
-    string path = "";
+    vector<int> path; 
 
     /// 5. create a map which contains the current path
-    map<int, string> memo; 
-    memo[src] = path; 
+    map<int, vector<int>> memo; 
+    // memo[src] = vector<int>(); 
 
     /// 6. apply dfs from the source
     DSR(G, dest, vis, memo, path, src);
