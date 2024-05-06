@@ -120,6 +120,64 @@ void printResult(map<int,vector<int>> &memo, const int& numNodes){
 }
 
 
+void BFS_RREQ(const vector<vector<int>>&G, const int &src, const int &dest,map<int,vector<int>> &memo){ 
+    /// create an empty queue
+    queue<int> Q; 
+    Q.push(src); 
+    
+    /// create a bool vector with size = # of nodes. 
+    vector<bool>vis(G.size()); 
+    /// initialize the memo of the src with the src.
+    memo[src] = {src}; 
+    /// create a path variable 
+    vector<int> path; 
+    /// apply bfs
+    while(Q.size()) { 
+        /// extract the top node 
+        int topNode = Q.front(); 
+        Q.pop(); 
+        /// mark as visited 
+        vis[topNode] = true; 
+        // /// if this node has a current path, so just get it, else, add
+        //// if(memo[topNode].size())
+        ////     path = memo[topNode]; 
+        //// else 
+        //     /// add the top node to the 
+        /// get the path of the current node
+        path = memo[topNode]; 
+
+        /// iterate over all its neighbours
+        for (int nei : G[topNode]) { 
+            /// if nei is the dest, skip 
+            if (nei == dest)
+                continue;
+            /// check if this neigbour was inserted in the memo before
+            if (memo[nei].size()) { 
+                path.push_back(nei); 
+                /// check if the length of the current path < previous path 
+                if (path.size() < memo[nei].size())
+                    memo[nei] = path; 
+                else if (path.size() == memo[nei].size()) { 
+                    /// get the smallest lexographical vector
+                    bool currentIsSmaller = lexicographical_compare(path.begin(), path.end(), memo[nei].begin(),memo[nei].end()); 
+                    if (currentIsSmaller)
+                        memo[nei] = path; 
+                }
+                path.pop_back(); 
+            } else { 
+                /// just append the neibour to the current path, and store it in the memo[nei]
+                path.push_back(nei); 
+                memo[nei] = path; 
+                path.pop_back(); 
+            }
+            /// if not visited before, insert it in the Queue.
+            if (!vis[nei])
+                Q.push(nei); 
+                vis[nei] = true; 
+        }
+    }
+}
+
 int main () { 
     DPSolver; 
     // 1. reading the graph in list format
@@ -141,7 +199,10 @@ int main () {
     // memo[src] = vector<int>(); 
 
     /// 6. apply dfs from the source
-    DSR(G, dest, vis, memo, path, src);
+    // DSR(G, dest, vis, memo, path, src);
+
+    /// 6. apply bfs from the source 
+    BFS_RREQ(G, src, dest, memo); 
 
     /// 7. print the result
     printResult(memo, G.size());   
