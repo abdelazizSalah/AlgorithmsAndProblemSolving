@@ -8,7 +8,7 @@ using ll = long long;
 using namespace std;
 // #pragma GCC optimize("O3", "unroll-loops")
 
-void DSR (const vector<vector<int>> &G , const int & dest, vector<bool>& vis, map<int,vector<int>>& memo, vector<int> path, int src) {
+void DSR (const vector<vector<int>> &G , const int & dest, vector<bool>& vis, map<int,vector<int>>& memo, vector<int> currentPath, int src) {
     /// base cases;  
     if (src == dest)
         return ;
@@ -18,24 +18,34 @@ void DSR (const vector<vector<int>> &G , const int & dest, vector<bool>& vis, ma
         /// minimizing on 2 factors. 
         /// 1. shorter length
         /// 2. smaller in lexographical order 
+        
+        /// this is because I do not insert the neighbour in the path before the call
+        currentPath.push_back(src); 
+
         int prevPathLen = memo[src].size();  
-        int currentPathLen = path.size();  
+        int currentPathLen = currentPath.size();  
         if (prevPathLen == currentPathLen) { 
-            vector<int> currenVector = memo[src]; 
-            for (int i = 0 ; i < prevPathLen; i++) { 
-                if (path[i] < currenVector[i]){
-                    memo[src] = path; 
-                    return; 
-                } else if (currenVector[i] < path[i]){ 
-                    return;
-                }
-                /// in case they are equal, just continue.
-            }
+            /// so we need to compare them lexographically
+            vector<int> prevPath = memo[src]; 
+            bool prevIsSmaller = lexicographical_compare(prevPath.begin(), prevPath.end(), currentPath.begin(), currentPath.end());
+            if (!prevIsSmaller) { 
+                /// the current is smaller 
+                memo[src] = currentPath; 
+            } 
+            // for (int i = 0 ; i < prevPathLen; i++) { 
+            //     if (currentPath[i] < prevPath[i]){ // compare the ids of the nodes
+            //         // currentPath.push_back(src);
+            //         memo[src] = currentPath; 
+            //         return; 
+            //     } else if (prevPath[i] < currentPath[i]){ 
+            //         return;
+            //     }
+            //     /// in case they are equal, just continue.
+            // }
             // memo[src] = min(path, memo[src]); /// heya de el 3amla el mushkela, lw galak 7agat 11 w 15 w bta3, httl3 ghlt azun
 
         } else if (prevPathLen > currentPathLen) { 
-            path.push_back(src); 
-            memo[src] = path ;
+            memo[src] = currentPath ;
         }
         /// the previous path was shorter, so keep it.
         return ;
@@ -45,12 +55,12 @@ void DSR (const vector<vector<int>> &G , const int & dest, vector<bool>& vis, ma
     vis[src] = true; 
 
     /// add the current node to the path
-    path.push_back(src);
-    memo[src] = path; 
+    currentPath.push_back(src);
+    memo[src] = currentPath; 
 
     /// iterate over all the nieghbours; 
     for (int nei : G[src]) { 
-        DSR(G, dest, vis, memo, path, nei); 
+        DSR(G, dest, vis, memo, currentPath, nei); 
     }
 }
 vector<vector<int>> readingGraph() { 
@@ -81,41 +91,44 @@ void printResult(map<int,vector<int>> &memo, const int& numNodes){
         Iterate over the map, if the element does not exist in the map, print -1, else print the path. 
     */
    for( int i = 1; i < numNodes; i ++) { 
-     if (memo[i].size())
-        for (int num : memo[i])
-            cout << num << ' ' ;  
-    else 
-        cout << "-1" ; 
+        if (memo[i].size())
+            for (int num : memo[i])
+                cout << num << ' ' ;  
+        else 
+            cout << "-1" ; 
         cout << '\n';  
    }
 }
 
 
 int main () { 
-    DPSolver; 
-    // 1. reading the graph in list format
-    vector<vector<int>> G = readingGraph(); 
-    // printGraph(G); 
+    vector<int> v1 = {11, 20, 3}; 
+    vector<int> v2 = {1, 20, 3};
+    cout <<  lexicographical_compare(v1.begin(), v1.end(), v2.begin(), v2.end());
+    // DPSolver; 
+    // // 1. reading the graph in list format
+    // vector<vector<int>> G = readingGraph(); 
+    // // printGraph(G); 
 
-    // 2. store the source and the destination
-    int src, dest; 
-    cin >> src >> dest; 
+    // // 2. store the source and the destination
+    // int src, dest; 
+    // cin >> src >> dest; 
 
-    /// 3. create a visited array to mark the previously visited nodes.
-    vector<bool> vis (G.size()); 
+    // /// 3. create a visited array to mark the previously visited nodes.
+    // vector<bool> vis (G.size()); 
 
-    /// 4. create an empty string which contains the path 
-    vector<int> path; 
+    // /// 4. create an empty string which contains the path 
+    // vector<int> path; 
 
-    /// 5. create a map which contains the current path
-    map<int, vector<int>> memo; 
-    // memo[src] = vector<int>(); 
+    // /// 5. create a map which contains the current path
+    // map<int, vector<int>> memo; 
+    // // memo[src] = vector<int>(); 
 
-    /// 6. apply dfs from the source
-    DSR(G, dest, vis, memo, path, src);
+    // /// 6. apply dfs from the source
+    // DSR(G, dest, vis, memo, path, src);
 
-    /// 7. print the result
-    printResult(memo, G.size());   
+    // /// 7. print the result
+    // printResult(memo, G.size());   
 
     return 0; 
 }
